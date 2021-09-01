@@ -1,0 +1,263 @@
+%% Todo cap\'itulo deve come\c{c}\~ao com o comando abaixo o qual deve conter o 
+%% t\'itulo do mesmo.
+\chapter{Fundamentação teórica}
+
+\section{Problema inverso}
+Trata-se de um problema para encontrar a melhor solução para os parâmetros do modelo que descrevem o meio físico \citep{newton_1982}. Para quantificar este problema, é definido um funcional que mostra a diferença entre os dados observados com os dados modelados, se o valor do funcional for mínimo, então os dados modelados estão próximo dos dados observados, logo a estimativa do parâmetro utilizado para obter o dado modelado será solução do problema inverso.
+\begin{figure}[htb]
+\centering
+\includegraphics[width= 9cm, height=6cm]{Figuras/problema_inverso.pdf}
+\caption{Problema inverso.} 
+\label{fig:problema_inverso}
+\end{figure}
+
+Na Figura \ref{fig:problema_inverso} mostra que o problema direto pode ser definido a partir do modelo real, $\mathbf{\text{M}}^{\text{real}}$, podemos encontrar os dados observados, $\mathbf{\text{D}}^{\text{obs}}$. Porém, o problema inverso é definido a partir do modelo estimado,   $\mathbf{\text{M}}^{\text{est}}$, podemos encontrar os dados modelados, $\mathbf{\text{D}}^{\text{mod}}$, se a diferença entre  $\mathbf{\text{D}}^{\text{obs}}$ e $\mathbf{\text{D}}^{\text{mod}}$ for a mínima possível, então teremos uma boa solução do problema. \\
+
+Para resolver esse problema, existe vários métodos de otimização que abrangem abordagens globais e locais que podem ser de maximização ou mínimização de um funcional \citep{nocedal_2006}. Para resolve-lo, precisamos de um método de minimização que irá procurar o valor mínimo do funcional entre os dados observados e modelados, e recursivamente atualizará o modelo estimado até que o funcional esteja no menor valor possível. \\
+ 
+Portanto, para resolver o problema inverso obtendo uma melhor estimativa dos parâmetros, é ter em mãos um método de otimização robusto que tenha uma rápida convergência da minimização do funcional.
+\newpage
+\section{Métodos de Otimização}
+
+Problemas de otimização podem ser problemas de maximização ou minimização de funções lineares e não-lineares com uma ou mais variáveis em um determinado domínio. Para resolver estes problemas, existem algoritmos que podem ser determinísticos ou probabilísticos. Neste trabalho será apresentado métodos de otimização para solucionar problemas para encontrar o mínimo valor da função objetivo. O esquema de recursão utilizado para resolver esse problema, é dado por
+\begin{eqnarray}
+\label{xk}
+             \mathbf{x}_{k+1} = \mathbf{x}_{k} + \alpha_{k} d_{k} 
+\end{eqnarray}
+onde $\mathbf{x}$ é o parâmetro da função que irá atualizar iterativamente, $\alpha$ é o comprimento do passo encontrado a partir de alguns métodos de pesquisa de linha e $d_{k}$ é a direção de busca que irá apontar para o mínimo da função, essa direção vai depender do método de otimização utilizado para resolver este problema. A escolha de bons métodos de pesquisa de linha e busca de direção, consequentemente, terá uma boa convergência, e assim, será encontrado mais rapidamente o mínimo da função. \\
+ 
+Para a escolha do tamanho do passo, existem vários métodos de pesquisa de linha presentes na literatura, mas para resolver problemas onde é preciso minimizar funções não-lineares, então é preciso utilizar a abordagem da pesquisa de linha inexata \citep{nocedal_2006}. Essa pesquisa irá aproximar um valor para $\alpha$ que irá depender do método de escolha para um determinada classe de métodos de direção de busca. Usualmente, os métodos da pesquisa de linha são as condições de Wolfe, condição de Armijo, condição de Armijo-Golstein e etc, essas condições permite a avaliação da função objetivo para observar se o tamanho do passo, $\alpha$, está sendo satisfeito para que a função sofra descréscimo. \\
+
+Além disso, há várias classes de métodos para calcular a direção de busca, na qual tem um papel importantíssimo na procura de uma solução otimizada. Dentre eles temos os métodos de Newton, quasi-Newton, Newton-Truncado, Gauss-Newton, gradiente conjugado e etc, que são estão sendo aplicados, cotidianamente, para resolver problemas de otimização. Portanto, para este trabalho, será utilizado dois tipos de métodos de direção de busca, o algoritmo da classe Quasi-Newton e o algoritmo do gradiente conjugado não-linear para resolver o processo de inversão de dados e encontrar uma boa solução para o FWI.   
+
+
+
+%\newpage
+%\subsection{Busca de linha inexata}
+%\subsubsection{Condição de Armijo}
+%\newpage
+%\subsubsection{Condição de Wolfe}
+%\newpage
+
+\subsection{Gradiente conjugado não-linear}
+O método originalmente foi projetado e analisado para problemas quadráticos em que a matriz é positiva definida e constante, mas extensões foram realizadas para lidar com problemas não-lineares \citep{polak_1965,hestenes_1952,fletcher_1964}. Esse algoritmo é bastante eficiente, pois, possui um baixo custo computacional, visto que necesssita apenas do gradiente do funcional, o que torna-o bastante efetivo para solucionar problemas em grande escala. Portanto, dada uma aproximação inicial, $\mathbf{x}_{0} \in \mathbb{R}^{n}$, aplicando a busca de linha inexata, então teremos um conjunto de direções conjugadas para $k$ iterações, a direção de busca é definida por % A abordagem nesse trabalho é a aplicação do gradiente conjugado não-linear com descida garantida \citep{hager_2005} aplicado para três diferentes parâmetros $\beta_{k}$  \citep{polak_1965,hestenes_1952,fletcher_1964} para resolver um problema de otimização sem vínculo. Esse método obedece a recorrência da equação \ref{xk}, então o cálculo da direção de busca é definido por
+    \begin{eqnarray}
+         \label{dirdesc}
+            d_{k}  = \left\{ \begin{array}{rll}
+           {d(0)= -g(0)} ~~~~~~~~~~~~~~~ &{, k=0} \\
+           {d_{k+1} =-g_{k+1}+\beta_{k} d_{k} ~~~~~}   
+          \end{array} \right.
+          \end{eqnarray}
+onde $g$ é o gradiente , $k$ é a iteração e $\beta_{k}$ são os parâmetros que diferenciam a direção de busca, esses parâmetros possui um risco crítico no gradiente, pois afeta a taxa de convergência para a solução do problema  e eles são definidos por :
+\begin{eqnarray}
+          \nonumber
+          \beta_{HS} = \frac{g_{k}^{T}~y_{k-1}}{d^{T}_{k-1} y_{k-1}}, ~~~ \beta_{PRP} = \frac{g_{k}^{T} y_{k-1}}{\left\|g_{k-1}\right\|^{2}}, ~~~\beta_{LS} = \frac{g_{k}^{T} y_{k-1}}{-d_{k-1}^{T} g_{k-1} } \\ \nonumber
+          \\ \nonumber \\ \nonumber
+          \beta_{DY} = \frac{\left \| g_{k} \right \|^{2}}{d^{T}_{k-1} y_{k-1}}, ~~~\beta_{FR} = \frac{\left \| g_{k}\right \|^{2}}{\left \| g_{k-1}\right \|^{2}},~~~ \beta_{CD} = \frac{\left \| g_{k}\right \|^{2}}{-d_{k-1}^{T} g_{k-1} }
+          \end{eqnarray}
+onde
+\begin{eqnarray}
+ \nonumber
+y_{k} = g_{k+1} - g_{k}
+\end{eqnarray}
+
+onde $y_{k}$ é uma equação auxiliar. Observa-se na equação \ref{dirdesc} que para encontrar a direção de descida,$d_{k}$, é necessário realizar uma recursão, na qual é essencial para cada atualização, o cálculo do gradiente a partir da solução encontrada com a melhor direção de descida, o que faz o funcional convergir e obter uma melhor solução possível para resolver o    problema. Entretanto, para o método de gradiente conjugado, os vários parâmetros $\beta$ encontrados na literatura, influenciam fortemente para a resolução do problema, visto que esses parâmetros dão um peso para a próxima direção de descida que irá ser calculado, como é observado na equação \ref{dirdesc}. 
+
+Portanto, a escolha dos parâmetros serão importantes para resolver o problema com êxito. Dessa maneira, escolher os parâmetros que possuem os cálculos de convergência serão optados para ter uma boa convergência do método, pois tem-se uma segurança a mais para resolver problemas em grande escala. Destarte, o método possui uma grande facilidade de implementação e, como informado acima, possui um baixo custo computacional. 
+
+\newpage
+\subsection{LBFGS-B Quasi-Newton}
+Todo problema de otimização é necessário minimizar uma função não linear,$f(\matbf{x})$, para obter uma melhor solução possível,$\mathbf{x}$, principalmente, quando temos o gradiente disponível, então, para solucionar esse problema, utilizaremos uma classe de métodos de otimização chamada Quasi-Newton. Esse método é baseado na projeção do gradiente, onde aproxima a matriz Hessiana a partir da matriz Jacobiana inversa \citep{byrd_representations_1994,al-baali_broydens_2013}. A partir dessa aproximação, usaremos o algoritmo LBFGS-B formulado por \citet{zhu_algorithm_1997}, na qual é desenvolvido a partir da aproximação da matriz Hessiana utilizando a matriz BFGS de memória limitada criado por \citet{nocedal_1980}. \\
+
+ No entanto, quando há problemas de grande porte, as técnicas de atualização do método Quasi-Newton tornam-se caras computacionalmente, pois a aproximação da Hessiana ocupa um grande espaço. Porém, o diferencial desse algoritmo é uma adaptação da matriz BFGS que consiste na otimização de memória onde as informações antigas da matriz são descartadas e substituidas pelas novas atualizações, com isso, facilitando a construção da matriz de aproximação da Hessiana sem ocupar um grande volume de dados \citep{morales_remark_2011,zhu_algorithm_1997}, o que torna o método um ótimo método de minimização para solução de problemas. \\
+ 
+ 
+
+%O algoritmo LBFGS-B propõem minimizar uma função não linear com $n$ variáveis sujeitos aos limites, $l\le \mathbf{x}\le u$, na qual são os vetores dos limites inferiores e superiores, respectivamente. 
+
+
+
+
+
+
+
+\newpage
+\section{Método dos Estados Adjuntos}
+O método dos estados adjuntos é uma metologia para calcular o gradiente de um certo funcional em relação aos parâmetros que envolvem essa função \citep{fichtner_full_2011,virieux_overview_2009}. Se tratando de inversão, é desejado encontrar os parâmetros que melhor descrevem os dados observados, mas para encontrar esses parâmetros ótimos irá depender das técnicas de otimização \citep{nocedal_2006}. Como foi visto acima, todas as técnicas de otimização requer o cálculo do gradiente da função objetivo em relação aos parâmetros do modelo para atualizar a cada iteração o modelo de velocidade que melhor se adequa ao modelo verdadeiro. \\
+
+ No entanto, no método, a função objetivo depende dos parâmetros do modelo através das variáveis de estado \citep{plessix_2006}. Dessa maneira, significa que o gradiente da função objetivo depende do gradiente do campo de onda em relação aos parâmetros do modelo \citep{fichtner_2011}.  Esse método matemático é uma ferramenta capaz que permite calcular o gradiente de um funcional sem da necessidade de construir a matriz sensibilidade. De uma maneira geral, será possível definir um problema de otimização com a minimização de uma função objetivo, então, temos que 
+
+\begin{eqnarray}
+\label{objfunction}
+ \mathcal{F}(\mathbf{m}) = \frac{1}{2} \left \| \mathbf{u}(\mathbf{m}) - d^{obs} \right \|^{2},
+\end{eqnarray}
+\begin{eqnarray}
+ \label{equacaoestado}
+ F(\mathbf{u}(\mathbf{m}), \mathbf{m} ) = 0,
+\end{eqnarray}
+
+onde $\mathbf{m}$ corresponde aos parâmetros do modelo, $\mathbf{u}(\mathbf{m})$ corresponde a váriável de estado que satisfaz a equação de estado \ref{equacaoestado} e $d^{obs}$ está relacionado aos dados observados. Para calcular o gradiente da função objetivo \ref{objfunction}, é preciso definir a Lagrangeana $\mathcal{L}$ , então
+
+\begin{eqnarray}
+\label{lagrange123}
+ \mathcal{L} (\mathbf{u}, \mathbf{m}, \Lambda) = \mathcal{F}(\mathbf{u},\mathbf{m}) + \langle F(\mathbf{u}, \mathbf{m}), \Lambda\rangle ,
+\end{eqnarray}
+
+onde $\Lambda$ é a varíavel de estado adjunto que não depende dos parâmetros do modelo. Como a equação de estado \ref{equacaoestado} é zero para qualquer $\Lambda$ e a mesma não depende dos parâmetros do modelo, então
+
+\begin{eqnarray}
+  \frac{\partial \mathcal{F}}{\partial \mathbf{m}} = \frac{\partial \mathcal{L}}{\partial \mathbf{m}}
+\end{eqnarray}
+
+
+A partir disso, é possível determinar o gradiente da função objetivo $\mathcal{F}$ avaliando a variação de primeira ordem da Lagrangeana em relação a uma configuração estácionaria. Agora será realizado a perturbação dos parâmetros do modelo $\delta \mathbf{m}$ e da variável de estado $\delta \mathbf{u}$, através de uma aproximação de primeira ordem para $\Lambda$ fixo, então
+
+\begin{eqnarray}
+\label{lagrange12}
+ \delta \mathcal{L} = \frac{\partial \mathcal{L}}{\partial \mathbf{u}} \delta \mathbf{u} + \frac{\partial \mathcal{L}}{\partial \mathbf{m}} \delta \mathbf{m}
+\end{eqnarray}
+
+
+Realizando o cálculos da equação \ref{lagrange12} e exigindo que a variação da função objetivo ocorra devido a variação dos parâmetros do modelo, é possível obter a equação adjunta e a fonte adjunta. A partir das equações descritas acima, é possível a aplicação do método adjunto nas equações acústicas da onda que é definida por
+\begin{eqnarray}
+ \frac{1}{c^{2}(\mathbf{x})} \frac{\partial ^{2} p(\mathbf{x},t)}{\partial t^{2}} - \nabla^{2} p(\mathbf{x},t) = f(\mathbf{x},t)
+%\end{eqnarray}
+
+%pnde $p(\mathbf{x},t)$ é o campo de pressão, $c(\mathbf{x})$ é o modelo de velocidade, $\mathbf{x}$ é o vetor posição e %$f(\mathbf{x},t)$ é o termo fonte. A equação de estado para esse problema é dado por 
+%\begin{eqnarray}
+%\label{f_esta}
+ %F(p,c) = \frac{1}{c^{2}(\mathbf{x})} \frac{\partial ^{2} p(\mathbf{x},t)}{\partial t^{2}} - \nabla^{2} p(\mathbf{x},t) -% f(\mathbf{x},t) = 0
+%\end{eqnarray}
+
+
+%A função objetivo é expressa por 
+%\begin{eqnarray}
+  %\mathcal{F} = \frac{1}{2} \sum_{s} \sum_{r} \int_{0}^{T} \left[ p^{obs} (t,\mathbf{x}_{r};\mathbf{x}_{s}) - p^{mod}(t,%\mathbf{x}_{r};\mathbf{x}_{s};c(\mathbf{x})) \right ] ^{2} dt
+%  \label{func_obj}
+%\end{eqnarray}
+
+%onde $\mathbf{x}_{r}$ e $\mathbf{x}_{s}$ são as posições do receptor e da fonte, respectivamente, $p^{obs}$ corresponde ao campo %observado e $p^{mod}$ corresponde ao campo modelado. O problema de otimização consiste em minimizar a função objetivo %$\mathcal{F}$ juntamente com a equação de estado. Com isso, pode-se definir a lagrangeana para o problema, então substituindo a %equação \ref{f_esta} e \ref{func_obj}  em \ref{lagrange123}, temos
+
+%\begin{eqnarray}
+%\mathcal{L}(c, p, \Lambda)=\frac{1}{2} \sum_{s} \sum_{r} \int_{0}^{T}\left[p^{o b s}\left(t, \mathbf{x}_{\mathbf{r}} ; %\mathbf{x}_{\mathbf{s}}\right)-p^{mod}\left(t, \mathbf{x}_{\mathbf{r}} ; \mathbf{x}_{\mathbf{s}} ; %c(\mathbf{x})\right)\right]^{2} d t 
+%\end{eqnarray}
+%\begin{eqnarray}
+%\nonumber
+%&+\sum_{s} \int_{\Omega} d \Omega \int_{0}^{T} d t \Lambda(t, \mathbf{x})\left[\frac{1}{c^{2}(\mathbf{x})} \frac{\partial^{2} %p(t, \mathbf{x})}{\partial t^{2}}-\nabla^{2} p(t, \mathbf{x})-f(\mathbf{x},t)\right]
+%\end{eqnarray}
+
+%onde $\Lambda(t,\mathbf{x})$ é a varíavel adjunta que não depende dos parâmetros do modelo. O gradiente do funcional %$\mathcal{F}$ pode ser avaliado a partir da variação de primeira ordem da Lagrangeana em relação a perturbação do modelo de %velocidade, na qual, induz uma perturbação no campo de pressão. Com isso, a variação da Lagrangeana é dada por 
+%\begin{eqnarray}
+% \delta \mathcal{L} = \frac{\partial \mathcal{L}}{\partial c} \delta c + \frac{\partial \mathcal{L}}{\partial p} \delta p
+%\end{eqnarray}
+
+%calculando as derivadas parciais e realizando cálculos e substituições posteriores, é possível definir a variação do funcional em relação aos parâmetros do modelo, o que permite obter a equação para o campo adjunto, onde é expresso por 
+%\begin{eqnarray}
+% \frac{1}{c^{2}(\mathbf{x})} \frac{\partial^{2} \Lambda(t, \mathbf{x})}{\partial t^{2}}-\nabla^{2} \Lambda(t, \mathbf{x})=\left[p^{o b s}\left(t, \mathbf{x} ; \mathbf{x}_{\mathbf{s}}\right)-p^{mod}\left(t, \mathbf{x} ; \mathbf{x}_{\mathbf{s}}\right)\right] \delta\left(\mathbf{x}-\mathbf{x}_{r}\right)
+% \label{campoadjunto}
+%\end{eqnarray}
+
+onde o resíduo do campo de pressão observado e modelado é a fonte adjunta. Essa equação está sujeita a certas condições, então 
+%\begin{eqnarray}
+%\left.\Lambda\left(T, \mathbf{x} ; \mathbf{x}_{s}\right)\right|_{\Omega} &=0 \\ \nonumber
+%\left.\frac{\partial \Lambda\left(T, \mathbf{x} ; \mathbf{x}_{s}\right)}{\partial t}\right|_{\Omega} &=0
+%\end{eqnarray}
+
+%e as condições de fronteira homogêneas
+%\begin{eqnarray}
+% \Lambda (t, \mathbf{x}; \mathbf{x}_{s} |_{\partial \Omega} = \nabla \Lambda (t,\mathbf{x};\mathbf{x}_{s}) |_{\partial \Omega} = 0
+%\end{eqnarray}
+
+%O gradiente da função objetivo pode ser observado pela parcela não nula da variação da Lagrangeana 
+%\begin{eqnarray}
+% \delta \mathcal{L}=\int_{\Omega} d \Omega \delta c(\mathbf{x}) \frac{\partial \mathcal{F}}{\partial c(\mathbf{x})}
+%\end{eqnarray}
+
+%onde o gradiente do funcional $\mathcal{F}$ é dado por 
+%\begin{eqnarray}
+% \frac{\partial \mathcal{F}}{\partial c(\mathbf{x})} \equiv-\frac{2}{c^{3}(\mathbf{x})} \sum_{s} \int_{0}^{T} d t \Lambda\left(t, %\mathbf{x} ; \mathbf{x}_{\mathbf{s}}\right) \frac{\partial^{2} p\left(t, \mathbf{x} ; \mathbf{x}_{\mathbf{s}}\right)}{\partial t^{2}}
+%\end{eqnarray}
+
+
+  %onde $\Lambda\left(t, \mathbf{x} ; \mathbf{x}_{\mathbf{s}}\right)$ é o campo adjunto retropropagado pelo resíduo dos campos de %pressão observado e modelado, $p$ é o campo da modelagem direta.
+%\newpage
+%\section{Aproximação de Born}
+%A aproximação de Born de primeira ordem é uma aproximação de espalhamento único, usada nas aplicações sísmicas para aproximar o %campo de onda pertubado devido a pertubação no meio de referência \citep{tarantola_2005, keys_1983}. Essa metodologia é uma forma %de linearizar o campo de onda no problema direto para obter uma solução aproximada do campo de origem. Problemas relacionados com %a equação da onda, onde a solução conhecida corresponde ao comportamento não linear entre equação da onda e o parâmetro do %modelo, utilizando a metodologia, a solução será linearizada, e assim, transformando uma problema não linear em um problema %linear. A equação da onda é dada por
+
+%\begin{eqnarray}
+%\frac{1}{c^{2}(\mathbf{x})} \frac{\partial^{2} p(\mathbf{x},t) }{\partial t^{2}} - \nabla^{2} p(\mathbf{x},t) = f(\mathbf{x},t)
+%\label{eq_wavefield}
+%\end{eqnarray}
+
+%onde $c$ é a velocidade, $p$ é o campo de pressão, $\mathbf{x}$ é a posição e $f(\mathbf{x},t)$ é o termo fonte, e usualmente, é %definido por $f(\mathbf{x},t) = \delta (\mathbf{x}-\mathbf{x}_{s})~S(t)$, onde o termo $\delta (\mathbf{x}-\mathbf{x}_{s})$ é a %localização da fonte e $S(t)$ é a wavelet mostrando a história da fonte. Aplicando a teoria da pertubação no modelo de %velocidade, e consequentemente, no campo de onda, temos que
+%\begin{eqnarray}
+% c(\mathbf{x}) = c_{0}(\mathbf{x}) + \delta c(\mathbf{x}) ~~~~~~~~~ p(\mathbf{x},t) = p_{0}(\mathbf{x},t) + \delta% p(\mathbf{x},t)
+% \label{eq_perturbation}
+%\end{eqnarray}
+%onde $c_{0}(\mathbf{x})$ é a velocidade de referência, $\delta c(\mathbf{x})$ é a velocidade perturbada, $p_{0}(\mathbf{x},t)$ é %o campo de onda de referência e $\delta p(\mathbf{x},t)$ é o campo de onda perturbado.
+%Realizando a substituição da equação \ref{eq_perturbation} em \ref{eq_wavefield}, temos
+
+%\begin{eqnarray}
+ %\frac{1}{\left[c_{0}(\mathbf{x})+\delta c(\mathbf{x})\right]^{2}} \frac{\partial^{2} \left[p_{0}(\mathbf{x},t) + \delta %p(\mathbf{x},t) \right]}{\partial t^{2}} - \nabla^{2} \left[p_{0}(\mathbf{x},t)+ \delta p(\mathbf{x},t) \right] =% f(\mathbf{x},t)
+% \label{eq_wavefield_perturbation}
+%\end{eqnarray}
+
+%A partir da equação acima, será realizada a aproximação de primeira ordem do primeiro termo da equação, então
+%\begin{eqnarray}
+ %\frac{1}{\left[c_{0}(\mathbf{x})+\delta c(\mathbf{x})\right]^{2}} \approx \left[ \frac{1}{c_{0}(\mathbf{x})^{2}} -% \frac{2~\delta c(\mathbf{x})}{c_{0}^{3}(\mathbf{x})} \right ]
+% \label{approximation_first_order}
+%\end{eqnarray}
+
+%Substituindo a equação \ref{approximation_first_order} em \ref{eq_wavefield_perturbation}, temos que
+%\begin{eqnarray}
+% \left[ \frac{1}{c_{0}(\mathbf{x})^{2}} - \frac{2~\delta c(\mathbf{x})}{c_{0}^{3}(\mathbf{x})} \right ]
+%\frac{\partial^{2} \left[p_{0}(\mathbf{x},t) + \delta p(\mathbf{x},t) \right]}{\partial t^{2}} - \nabla^{2} \left[p_{0}(\mathbf{x},t)+ \delta p(\mathbf{x},t) \right] = f(\mathbf{x},t)
+%\end{eqnarray}
+
+%Realizando as distribuições e substituições, é encontrado o campo de onda perturbado, então
+%\begin{eqnarray}
+% \frac{1}{c_{0}^{2}(\mathbf{x})} \frac{\partial^{2} \delta p(\mathbf{x},t)}{\partial t^{2}} - \nabla ^{2} \delta p(\mathbf{x},t)% = \left [\frac{2\delta c(\mathbf{x})}{c_{0}^{3}(\mathbf{x})} \right ] \frac{\partial^{2} p_{0}(\mathbf{x},t)}{\partial t^{2}}
+% \label{eq_perturbation_linearized}
+%\end{eqnarray}%
+
+%onde o termo fonte depende do campo de onda de referência. A equação \ref{eq_perturbation_linearized} corresponde à forma %linearizada da equação da onda perturbada utilizando a aproximação de born como descrito por \citet{keys_1983}. Em outras %palavras, temos a aproximação da relação linear entre o campo onda perturbado $\delta p$ e o modelo de velocidade perturbado %$\delta c$. Para realizar a modelagem do campo de onda perturbado, será preciso modelar o campo de onda utilizando o modelo de %velocidade de referência, pois o termo fonte da equação \ref{eq_wavefield_perturbation}  é dependente desse campo de onda. %Realizando essa aproximação, a modelagem irá considerar apenas reflexões primárias no campo de onda. A Figura %\ref{approximation_born} mostra o comportamento da aproximação de acordo com o que foi descrito acima.
+%\begin{figure}[htb]
+%\centering
+%\includegraphics[width=12cm, height=8cm]{Figuras/approximation_born.pdf}
+%\caption{Sistema do problema de espalhamento do campo de onda, onde o meio foi decomposto em duas partes : meio de fundo $c_{0}$ %e o meio perturbado ou espalhado  $\delta c$, e os campos correspondentes, $p_0$ campo de onda de referência e $\delta p$ campo %de onda perturbado.}
+%\label{approximation_born}
+%\end{figure}
+
+
+
+
+
+
+
+\newpage
+\section{Migração reversa no tempo}
+
+Há muitos métodos de migração de dados sísmicos, mas um dos métodos mais preciosos é a migração reversa no tempo. A metodologia é capaz de lidar com diversas variações de velocidade, de modo que torna o método atrativo para o imageamento de estruturas complexas \citep{baysal_1983}. Entretanto, o intuito físico é que os campos de onda devem correlacionar nas iterfaces refletoras através dos campos de onda da fonte e dos receptores, essa métodologia é denominada de condição de imagem. \\
+
+A condição de imagem tem como objetivo formar uma imagem ponto a ponto em cada intervalo temporal para gerar uma imagem migrada a partir de uma correlação cruzada entre os campos (fonte e receptor). Matematicamente, esse método correlaciona os campos de fonte com os campos de receptores no espaço e no tempo, então temos:
+
+\begin{eqnarray}
+ I (\mathbf{z},\mathbf{x}) = \int_{0}^{t} dt~~~ p_{f}(\mathbf{z},\mathbf{x};t)~*~ p_{r}(\mathbf{z},\mathbf{x};t)
+ \label{eq:correlation_rtm}
+\end{eqnarray}
+\\
+onde $I$ é a imagem migrada, $p_{f}$ é o campo de onda gerada pela fonte e $p_{r}$ é o campo de onda gerado pelo receptor. O campo de onda gerada pela fonte, $p_{f}$, é gerado a partir de uma aquisição sísmica utilizando um modelo de velocidade pré-determinado observado na Figura \ref{fig:rtm}, esse sinal recebido pelo receptor irá se tornar a fonte para gerar o campo de onda dos receptores,$p_{r}$, observado na Figura \ref{fig:rtm_2} e, assim, se propagar para correlacionar ponto a ponto para gerar a imagem.
+
+\begin{figure}[h!]
+\centering
+\subfigure[Campo de onda da fonte]{
+    \includegraphics[width=0.40\textwidth]{Figuras/rtm.pdf}
+    \label{fig:rtm}}
+  \subfigure[Campo de onda dos receptores]{
+    \includegraphics[width=0.40\textwidth]{Figuras/rtm_2.pdf}
+    \label{fig:rtm_2}}
+   
+  \caption{As Figuras mostram os processos realizados para realizar a migração reversa no tempo: (a) é o processo que gera o campo de onda da fonte que evolui para frente no tempo e (b) mostra o processo que gera o campo de onda dos receptores que evolui para trás no tempo. }
+\end{figure}
+
+ Destarte, obtêm-se os dois campos de onda (``forward'' e ``backward''), logo, é necessário aplicar a condição de imagem (correlação cruzada) da equação \ref{eq:correlation_rtm} para extrair a imagem migrada da subsuperfície estudada. Portanto, o método RTM (``Reverse time migration'' ou Migração reversa no tempo) é uma ótima ferramenta de imageamento da subsuperfície, além de ter excelentes resultados para modelos de velocidade com variações laterais. Na literatura, há muitas maneiras de aplicação desse método para obter um melhor imageamento da subsuperfície, como, por exemplo, uma aplicação é a aproximação de born, na qual essa metodologia faz com que os campos de onda tenha apenas reflexões primárias, destarte, eliminando múltiplas e outros dados não-essenciais.

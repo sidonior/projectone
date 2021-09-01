@@ -1,0 +1,188 @@
+\documentclass[M]{geof-ufpa}
+
+%% Este aquivo (Exemplo.tex) \'e o arquivo pricipal do modelo de 
+%% TCC/Disserta\c{c}\~ao/Tese. A compila\c{c}\~ao da tese deve ser feita a 
+%% partir deste arquivo sendo todos os outros arquivos auxiliares (.tex, 
+%% .bib., .cls. bst). O nome deste arquivo pode ser mudado.
+%%
+%%     LEIA COM MUITA ATEN\c{C}\~AO TODOS OS COMENT\'ARIOS FEITOS AQUI.
+%%
+%%              RECOMENDAMOS QUE ANTES DE USAR ESTE MODELO, 
+%%               O MANUAL DE EDITORA\c{C}\~AO SEJA LIDO.
+%%
+%%
+%%*********** Modelo de TESE / DISSERTA\c{C}\~AO / TCC *************************
+%% ATEN\c{C}\~AO: N\~AO MOFICIAR A ESTRUTURA DESTE ARQUIVO.
+%%
+%% O Tipo de texto \'e escolhido mudando a op\c{c}\~ao de classe de documento 
+%% no commando \documentclass[X]{geof-ufpa} acima: 
+%%
+%%       D - Tese de doutorado
+%%       M - Disseta\c{c}\~ao de mestrado
+%%       G - Trabalho de Conclus\~ao de Curso da Gradua\c{c}\~ao
+%%
+%%
+%%   Atualizada em 23 de mar\c{c}o de 2018
+%%
+%%******************************************************************************
+%%
+%% Para personalizar este modelo para o seu Trabalho basta alterar as 
+%% informa\c{c}\~oes dentro dos comandos e ambientes pr\'e-determinados.
+%%
+%% **************************************************
+%%                                                  *
+%% N\~AO ALTERAR NENHUM COMANDO DESTE ARQUIVO!!     *
+%%                                                  * 
+%%***************************************************
+%%
+%% Os coment\'arios com duas porcentagens (%%) n\~ao devem ser alterados ou 
+%% retirados. Por\'em alguns dos comandos abaixo podem estar ``desligados'' 
+%% (comentados) com uma s\'o porcentagem(%). Estes comando podem ser incluidos 
+%% (``ligados'') descomentando-os. De modo an\'alogo, alguns comandos podem 
+%% n\~ao ser usados (``desligados'') comentando-os com uma porcentagem (%) 
+%% simples.
+
+
+\input{macro.tex} 
+%% Inclui arquivo com pacotes extras, macros e/ou novos comandos. Portanto 
+%% novos pacotes ou comandos devem ser incluidos nesse arquivo.
+%% NAO MUDAR O NOME DESTE ARQUIVO.
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%   -   INFORMAÇÕES   -   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% N\~ao retirar ou adicionar nenhum comando. Mude somente as informa\c{c}\~oes 
+%% ligadas ao seu trabalho (t\'itulo, nome, etc...)
+
+\title{T\'itulo do trabalho, que normalmente \'e um nome t\~ao grande que n\~ao  
+cabe em uma linha de texto\ldots} 
+\author{Rafael Sidônio Gibson Gomes}
+
+\area{Métodos Sísmicos} % Nao necessario para alunos de gradua\c{c}\~ao
+
+\date{2020}
+
+%% Os Comandos \advisor e \coadvisor abaixo recebem 3 entadas: nome (incluindo 
+%% t\'itulo), afilia\c{c}\~ao (institui\c{c}\~ao e/ou empresa) e genero (H - 
+%% homem; M- mulher)
+\advisor{Dr. Jessé Carvalho Costa}{Universidade Federal do Par\'a}{H}
+
+%% Caso n\~ao haja coorientador, comentar o comando abaixo.
+\coadvisor{Dr. Alberto Santos Dummont}{UFLN}{H}
+%% Comandos \bancadois, \bancatres, \bancaquatro,\bancacinco recebem cada um
+%% 2 entradas: nome (incluindo t\'itulo), afilia\c{c}\~ao.
+
+%% Se o membro 2 da banca for coorientador usar op\c{c}\~ao \bancadois[co]{XXX}.
+%% Caso contr\'ario, usar a op\c{c}\~ao \bancadois{XXX}.
+\bancadois[co]{Prof. Dr. Alberto Santos Dummont}{Universidade Federal de Lugar Nenhum}
+%\bancadois{Prof. Dr. Alberto Santos Dummont}{Universidade Federal de Lugar Nenhum}
+
+\bancatres{Prof. Dr. Is\'aqui Nilton}{Universidade Federal do Par\'a}
+
+
+%% Estes comandos s\'o ser\~ao necess\'arios em caso de Tese de Doutorado. No 
+%% caso de TCC e Disserta\c{c}\~oes de mestrado basta ignor\'a-los.
+\bancaquatro{Profa. Dra. Ellen de Nazar\'e Souza Gomes Costa Corr\^ea Machado 
+Alves Martins da Silva}{Universidade Federal do Rio Grande do Norte}
+
+\bancacinco{Prof. Dr. S\'o Isso}{Universidade Federal do Par\'a}
+
+
+%% Colocar palavras chaves do trabalho. Elas ser\~ao colocadas automaticamente 
+%% no Resumo.
+\chaves{Isso. Aquilo. Aquilo outro.}
+
+%% As mesmas palavras-chave anteriores mas em ingl\^es. Ser\~ao utomaticamente 
+%% inseridas no Abstract
+\keys{Car. Apartment. Safe.} 
+
+%%%%%%%%%%%%%%%%%%%   -   PARTES PRETEXTUAIS   -   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\capa %% Obrigatorio
+\rosto  %% Obrigatorio
+
+
+\includepdf[pages=-,pagecommand={},width=\textwidth]{Exemplo_fica_catalografica_2014.pdf}
+%% Ficha catalogr\'afica. Comentar comando abaixo quando for imprimir, pois, a 
+%% ficha catalogr\'afica deve ser impressa no verso da folha de rosto. 
+%% Descomentar ao fazer a vers\~ao eletr\^onica do TCC. Esta ficha deve ser 
+%% solicitada através do Sistema FICAT (Sistema de gera\c{c}\~ao de Ficha 
+%% Catalogr\'afica da UFPA), dispon\'ivel no site da Biblioteca Central da UFPA, 
+%% através do link www.bcficat.ufpa.br/ficha\_catalografica.php. Ela deve estar 
+%% no formato pdf.
+
+
+
+\aprovacao{30 de fevereiro de 2020} %%Obrigatorio
+
+
+%% Este comando \'e Opcional. Caso n\~ao deseje inserir dedicat\'oria, basta 
+%% coment\'a-lo. Lembrando que agradecimentos pessoais, relisiosos ou afetivos
+%% devem ser feitos aqui. %% Os AGRADECIMENTOS (veja abaixo) devem conter 
+%% somente agradecimentos institucionais. 
+\dedicatoria{Ao verme que primeiro roeu as frias carnes do meu cad\'aver\ldots}
+
+
+%% No arquivo pretextuais.tex dever\~ao ser inclu\'idos: 
+%% - AGRADECIMENTOS (obrigat\'orio),
+%% - EP\'IGRAFE (opcional),
+%% - RESUMO (obrigat\'orio), e
+%% - ABSTRACT (obrigat\'orio). 
+%% NAO MUDAR O NOME DESTE ARQUIVO.
+\include{pretextuais} 
+
+%% Listas de figuras, tabelas, siglas, s\'imbolos e abreviaturas: TODAS OPCIONAIS. 
+
+%% Para fazer listas de figuras e de tabelas h\'a comandos espec\'ificos que as 
+%% constroem automaticamente. Caso n\~ao queira alguma delas, basta coment\'a-los.
+\listoffigures
+%\listoftables
+
+%% J\'a as listas de siglas, s\'imbolos e abreviaturas devem ser construidas 
+%% pelo autor no arquivo listofsymbols.tex. N\~AO MUDAR O NOME DESTE ARQUIVO.
+\include{listofsymbols} 
+
+%% SUMARIO - OBRIGATORIO %%%
+\tableofcontents        
+
+
+
+%%%%%%%%%% - TEXTO - %%%%%%%%%%%%%%%%%%%%
+%% cada cap\'itulo deve ter seu arquivo tex. Eles podem ser nomeados livremente
+%% bastando que a devida substitui\c{c}\~ao nos comandos abaixo seja feita. Caso
+%% queira incluir mais cap\'itulos, basta adicionar mais comandos \include{XXXX}
+%% abaixo.
+
+\include{Cap_1}
+\include{Cap_2}
+\include{Cap_3}
+\include{Cap_4}
+\include{Cap_5}
+
+
+%%%%%%%%%% - BIBLIOGRAFIA - %%%%%%%%%%%%%%%%%%%%
+%% colocar o seu arquivo .bib pessoal com as refer\^encias do seu trabalho
+\bibliography{geof_EM} 
+
+%% N\~AO ALTERAR ESTES ESTILOS
+%\bibliographystyle{geof-ufpa_en} %% para trabalho escrito em ingles 
+\bibliographystyle{geof-ufpa} %% para trabalho escrito em portugues 
+
+
+%%%%%%%%%% - APENDICES E ANEXOS - %%%%%%%%%%%%%%%%%%%%
+%% Comentar os comandos abaixo caso n\~ao existam apendices. A din\^amica de 
+%% nomea\c{c}\~ao e inclus\~ao de ap\^endices, segue \`aquela dos cap\'itulos.
+
+\apendices 
+%\include{apendiceA}
+%\include{apendiceB}
+
+%% Descomentar os comandos abaixo caso existam anexos. A din\^amica de 
+%% nomea\c{c}\~ao e inclus\~ao de anexos, segue \`aquela dos cap\'itulos.
+
+%\anexos
+%\include{Cap_4_anexo}
+
+
+\end{document}

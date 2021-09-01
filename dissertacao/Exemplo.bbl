@@ -1,0 +1,147 @@
+\begin{thebibliography}{28}
+\providecommand{\natexlab}[1]{#1}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+
+\bibitem[{Al-Baali et~al.(2013)Al-Baali, Spedicato and
+  Maggioni}]{al-baali_broydens_2013}
+Al-Baali, M., Spedicato, E. and Maggioni, F., 2013, Broyden's {Quasi}-{Newton}
+  {Methods} for a {Nonlinear} {System} of {Equations} and {Unconstrained}
+  {Optimization}: a {Review} and {Open} {Problems}. Optimization methods \&
+  software, \doi{10.1080/10556788.2013.856909}.
+
+\bibitem[{Baysal et~al.(1983)Baysal, Kosloff and Sherwood}]{baysal_1983}
+Baysal, E., Kosloff, D. and Sherwood, J., 1983, Reverse-{Time} {Migration}.
+  Geophysics, \textbf{48}, 1514--1524, \doi{10.1190/1.1441434}.
+
+\bibitem[{Bunks et~al.(1995)Bunks, Saleck, Zaleski and Chavent}]{bunks_1995}
+Bunks, C., Saleck, F., Zaleski, S. and Chavent, G., 1995, Multiscale seismic
+  {Wave}-{Form} inversion. Geophysics, \textbf{60}, 1457--1473,
+  \doi{10.1190/1.1443880}.
+
+\bibitem[{Claerbout(1971)}]{claerbout_1971}
+Claerbout, J.F., 1971, Toward a unified theory of reflector mapping.
+  GEOPHYSICS, \textbf{36}(3), 467--481, \doi{10.1190/1.1440185}.
+
+\bibitem[{Claerbout(1976)}]{claerbout_1976}
+Claerbout, J.F., 1976, Fundamentals of geophysical data processing: with
+  applications to petroleum prospecting. McGraw-Hill.
+
+\bibitem[{Fichtner(2011)}]{fichtner_full_2011}
+Fichtner, A., 2011, Full {Seismic} {Waveform} {Modelling} and {Inversion}.
+  Advances in {Geophysical} and {Environmental} {Mechanics} and {Mathematics},
+  Springer Berlin Heidelberg, Berlin, Heidelberg,
+  \doi{10.1007/978-3-642-15807-0}.
+
+\bibitem[{Fichtner and Trampert(2011)}]{fichtner_2011}
+Fichtner, A. and Trampert, J., 2011, Hessian kernels of seismic data
+  functionals based upon adjoint techniques. Geophysical Journal International,
+  \textbf{185}(2), 775--798.
+
+\bibitem[{Fletcher and Reeves(1964)}]{fletcher_1964}
+Fletcher, R. and Reeves, C.M., 1964, Function minimization by conjugate
+  gradients. The Computer Journal, \textbf{7}(2), 149--154,
+  \doi{10.1093/7.2.149}.
+
+\bibitem[{Gauthier et~al.(1986)Gauthier, Virieux and Tarantola}]{gauthier_1986}
+Gauthier, O., Virieux, J. and Tarantola, A., 1986, Two‐dimensional nonlinear
+  inversion of seismic waveforms: {Numerical} results. GEOPHYSICS,
+  \textbf{51}(7), 1387--1403, \doi{10.1190/1.1442188}.
+
+\bibitem[{Hestenes and Stiefel(1952)}]{hestenes_1952}
+Hestenes, M.R. and Stiefel, E., 1952, {Methods} of {Conjugate} {Gradients} for
+  {Solving} {Linear} {Systems}. Journal Research of the National Bureau of
+  Standarde, \textbf{49}(6), 409--436.
+
+\bibitem[{Jannane et~al.(1989)}]{jannane_1989}
+Jannane, M. et~al., 1989, Wavelengths of earth structures that can be resolved
+  from seismic reflection data. GEOPHYSICS, \textbf{54}(7), 906--910,
+  \doi{10.1190/1.1442719}.
+
+\bibitem[{Liu et~al.(2015)Liu, Yang, Chi and Dong}]{liu_improved_2015}
+Liu, Y., Yang, J., Chi, B. and Dong, L., 2015, An improved scattering-integral
+  approach for frequency-domain full waveform inversion. Geophysical Journal
+  International, \textbf{202}(3), 1827--1842, \doi{10.1093/gji/ggv254}.
+
+\bibitem[{Macedo(2014)}]{macedo_2014}
+Macedo, D.L., 2014, Scattering-based decomposition of sensitivity kernels of
+  acoustic full waveform inversion. Unicamp repository.
+
+\bibitem[{Menke(1989)}]{menke_1989}
+Menke, W., 1989, Geophysical {Data} {Analysis}: {Discrete} {Inverse} {Theory}.
+  Elsevier.
+
+\bibitem[{Mora(1987)}]{mora_1987}
+Mora, P., 1987, Nonlinear two‐dimensional elastic inversion of multioffset
+  seismic data. GEOPHYSICS, \textbf{52}(9), 1211--1228,
+  \doi{10.1190/1.1442384}.
+
+\bibitem[{Morales and Nocedal(2011)}]{morales_remark_2011}
+Morales, J. and Nocedal, J., 2011, Remark on “{Algorithm} 778:
+  {L}-{BFGS}-{B}: {Fortran} {Subroutines} for {Large}-{Scale} {Bound}
+  {Constrained} {Optimization}”. ACM Trans. Math. Softw., \textbf{38}, 7,
+  \doi{10.1145/2049662.2049669}.
+
+\bibitem[{Nocedal(1980)}]{nocedal_1980}
+Nocedal, J., 1980, Updating {Quasi}-{Newton} {Matrices} with {Limited}
+  {Storage}. Mathematics of Computation, \textbf{35}(151), 773--782,
+  \doi{10.2307/2006193}.
+
+\bibitem[{Nocedal and Wright(2006)}]{nocedal_2006}
+Nocedal, J. and Wright, S.J., 2006, Numerical Optimization, vol.~2 de serie.
+  Springer-Verlag New York, New York, United States, 2nd edn.
+
+\bibitem[{Pasalic and McGarry(2010)}]{pasalic_convolutional_2010}
+Pasalic, D. and McGarry, R., 2010, Convolutional perfectly matched layer for
+  isotropic and anisotropic acoustic wave equations. In: {SEG} {Technical}
+  {Program} {Expanded} {Abstracts} 2010. {SEG} {Technical} {Program} {Expanded}
+  {Abstracts}, Society of Exploration Geophysicists, 2925--2929,
+  \doi{10.1190/1.3513453}.
+
+\bibitem[{Plessix(2006)}]{plessix_2006}
+Plessix, R., 2006, A review of the adjoint-state method for computing the
+  gradient of a functional with geophysical applications. Geophysical Journal
+  International, \textbf{167}(2), 495--503.
+
+\bibitem[{Polak and Ribiere(1965)}]{polak_1965}
+Polak, E. and Ribiere, G., 1965, {Note} sur la convergence de méthodes de
+  directions conjuguées. ESAIM Mathematical Modelling and Numerical Analysis,
+  \textbf{3}(1), 35--43.
+
+\bibitem[{Roland and Komatitsch(2009)}]{roland_2009}
+Roland, M. and Komatitsch, D., 2009, An unsplit convolutional perfectly matched
+  layer technique improved at grazing incidence for the viscoelastic wave
+  equation. Geophysical Journal International, \textbf{179}(1), 333--344.
+
+\bibitem[{Snieder et~al.(2002)Snieder, Grêt, Douma and Scales}]{snieder_2002}
+Snieder, R., Grêt, A., Douma, H. and Scales, J., 2002, Coda {Wave}
+  {Interferometry} for {Estimating} {Nonlinear} {Behavior} in {Seismic}
+  {Velocity}. Science (New York, N.Y.), \textbf{295}, 2253--5,
+  \doi{10.1126/science.1070015}.
+
+\bibitem[{Symes(2008)}]{symes_2008}
+Symes, W., 2008, Migration velocity analysis and waveform inersion. Geophysical
+  Prospecting, \textbf{56}, 765--790, \doi{10.1111/j.1365-2478.2008.00698.x}.
+
+\bibitem[{Tarantola(1984)}]{tarantola_linearized_1984}
+Tarantola, A., 1984, Linearized {Inversion} of {Seismic} {Reflection} {Data}*.
+  Geophysical Prospecting, \textbf{32}(6), 998--1015,
+  \doi{10.1111/j.1365-2478.1984.tb00751.x}.
+
+\bibitem[{Tarantola(2005)}]{tarantola_2005}
+Tarantola, A., 2005, Inverse {Problem} {Theory} and {Methods} for {Model}
+  {Paramenter} {Estimation}. Society for Industrial and Applied Mathematic,
+  Philadelphia, PA.
+
+\bibitem[{Tröltzsch(2010)}]{troltzsch_2010}
+Tröltzsch, F., 2010, Optimal control of partial differential equations.
+  {Theory}, methods and applications. \textbf{112}, \doi{10.1090/gsm/112}.
+
+\bibitem[{Virieux and Operto(2009)}]{virieux_overview_2009}
+Virieux, J. and Operto, S., 2009, An overview of full-waveform inversion in
+  exploration geophysics. Geop, \textbf{74}(6), WCC127,
+  \doi{10.1190/1.3238367}.
+
+\end{thebibliography}

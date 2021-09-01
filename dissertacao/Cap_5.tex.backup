@@ -1,0 +1,88 @@
+\chapter{Resultados}
+
+O primeiro experimento realizado tem como objetivo assegurar os resultados da implementação do FWI convencional, a partir de modelos simples e de pequena escala.
+
+
+\section{Experimento 1}
+O primeiro experimento consiste em uma inversão sísmica convencional a partir de um simples modelo de velocidade, na qual esse experimento consiste em uma malha $51\hbox{x}101$ com espaçamento na horizontal e vertical de $10~m$, o modelador contém a borda CPML com 30 pontos na horizontal e vertical, na borda,a frequência utilizada é de $10~Hz$ e a wavelet é a Ricker. O código é implementado com paralelismo, utiliza-se o MPI separado em 8 processos para acelerar o tempo de modelagem. O modelo real contém duas anomalias gaussianas esféricas, sendo uma de alta velocidade e outra baixa velocidade, na Figura \ref{modeloreal} é mostrado o modelo que será realizado a aquisição para ter os dados observados
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=8cm, height=5cm]{Figuras/experimento1/modelo_real.eps}
+\caption{Modelo de velocidade real para a realização da aquisição para obter os traços sísmicos dos dados observados.}
+\label{modeloreal}
+\end{figure}
+
+
+Após a aquisição, esse modelo será suavizado para obter um modelo de fundo para servir de modelo inicial para a realização da modelagem para obter os dados modelados, na Figura \ref{modeloinicial} mostra o modelo de entrada no FWI.
+
+\begin{figure}
+\centering
+\includegraphics[width=8cm, height=5cm]{Figuras/experimento1/modelo_inicial.eps}
+\caption{Modelo de velocidade inicial para a realização da aquisição para obter os traços sísmicos dos dados modelados.}
+\label{modeloinicial}
+\end{figure}
+
+\\
+
+Após essa etapa, é necessário realizar a modelagem direta e retropropagando o campo adjunto, na qual será aplicado a condição de imagem para calcular o gradiente a partir correlação cruzada entre o campo modelado e o campo adjunto. A aplicação dos métodos de otimização será na modelagem do FWI, os códigos de otimização LBFGS-B e gradiente conjugado não-linear. Os dados de entrada para os códigos de otimização será o modelo de velocidade atual, a função objetivo e o gradiente construído pela modelagem conforme o fluxograma da Figura \ref{fig:fluxograma_otimização}. Portanto, utilizando o algoritmo LBFGS-B, obteve os seguintes resultados dos modelos de velocidade gerados pelo FWI mostrados na Figura \ref{fig:experimento1}. 
+ \\
+
+
+
+
+\begin{figure}[h!]
+  \centering
+  \subfigure[Iteração 20]{
+    \includegraphics[width=0.40\textwidth]{Figuras/experimento1/velmodel_0020_fwi.eps}
+    \label{fig:ex_1}}
+  \subfigure[Iteração 80]{
+    \includegraphics[width=0.40\textwidth]{Figuras/experimento1/velmodel_0080_fwi.eps}
+    \label{fig:ex_2}} \\
+  \subfigure[Iteração 120]{
+    \includegraphics[width=0.40\textwidth]{Figuras/experimento1/velmodel_0120_fwi.eps}
+    \label{fig:ex_3}}
+  \subfigure[Iteração 193 ]{
+    \includegraphics[width=0.40\textwidth]{Figuras/experimento1/velmodel_0193_fwi.eps}
+    \label{fig:ex_4}}
+    \caption{Modelos de velocidade gerados a partir do FWI convencional aplicado a um simples modelo utilizando o algoritmo de otimização LBFGS-B  }
+    \label{fig:experimento1}
+\end{figure}
+
+
+As Figuras \ref{fig:experimento1}(a) e \ref{fig:experimento1}(b), mostram os dois modelos de velocidade gerados a partir do LBFGS-B, na iteração 20 mostra um modelo com vários artefatos devido a grande quantidade de mínimos locais, quanto a iteração 80, o modelo melhora significamente em relação a iteração 20, mas ainda há artefatos abaixo das anomalias de velocidade. Enquanto nas Figuras  \ref{fig:experimento1}(c) e \ref{fig:experimento1}(d), mostram os dois últimos modelos de velocidade gerado na iteração 120 e na última iteração 193, esses dois modelos ainda possuem artefatos gerados pela inversão, não foi possível gerar mais iterações por conta de uma má direção de busca encontrando vários mínimos locais, pois no algoritmo LBFGS-B há limites para calcular a pesquisa de linha, se haver uma má direção, a pesquisa de linha ficará retida e a função objetivo não diminuirá.
+
+
+%Utilizando o algoritmo Gradiente conjugado com  a constante $\beta$ PRP, obteve os seguintes resultados dos modelos de velocidade gerados pelo FWI. 
+
+
+
+%\begin{figure*}
+%\begin{minipage}[b]{.46\linewidth}
+%\centering
+%\includegraphics[width= 7cm, height= 5cm]{figures/velmodel_0020_fwi_cg.eps}
+%\caption{Modelo de velocidade gerado na iteração 20 do algoritmo de otimização Gradiente conjugado PRP}
+%\label{iter20cg}
+%\end{minipage} \hfill
+%\begin{minipage}[b]{.46\linewidth}
+%\centering 
+%\includegraphics[width= 7cm, height= 5cm]{figures/velmodel_0080_fwi_cg.eps}
+%\caption{Modelo de velocidade gerado na iteração 80 do algoritmo de otimização Gradiente conjugado PRP}
+%\label{iter80cg}
+%\end{minipage}
+%\begin{minipage}[b]{.46\linewidth}
+%\centering 
+%\includegraphics[width= 7cm, height= 5cm]{figures/velmodel_0120_fwi_cg.eps}
+%\caption{Modelo de velocidade gerado na iteração 120 do algoritmo de otimização Gradiente conjugado PRP}
+%\label{iter120cg}
+%\end{minipage}
+%\begin{minipage}[b]{.46\linewidth}
+%\centering 
+%\includegraphics[width= 7cm, height= 5cm]{figures/velmodel_0180_fwi_cg.eps}
+%\caption{Modelo de velocidade gerado na iteração 180 do algoritmo de otimização Gradiente conjugado PRP}
+%\label{iter180cg}
+%\end{minipage}
+%\end{figure*}
+
+
+%Nas Figuras \ref{iter20cg} e \ref{iter80cg} mostra dois modelos de velocidade gerados pelo algoritmo de Gradiente conjugado PRP na iteração 20 e 80, respectivamente. Os dois modelos apresentam muitos artefatos, relacionando com o algoritmo LBFGS-B, na iteração 80, o algoritmo mostra um modelo de velocidade \ref{iter80} com uma solução mais eficaz que o gerado pelo Gradiente conjugado, mas essa presença de muitos artefatos foi devido a um erro de programação na matriz pseudo-Hessiana, assim gerando uma imagem cheia de artefatos, já os outros dois modelos \ref{iter120cg} e \ref{iter180cg}, mostra mais duas iterações posteriores, confirmando que há muitos artefatos gerados por esse erro. 

@@ -1,0 +1,94 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: Exemplo.aux
+A level-1 auxiliary file: Cap_1.aux
+A level-1 auxiliary file: Cap_3.aux
+A level-1 auxiliary file: Cap_4.aux
+A level-1 auxiliary file: Cap_5.aux
+The style file: geof-ufpa.bst
+A level-1 auxiliary file: apendiceA.aux
+Database file #1: geof_EM.bib
+Repeated entry---line 388 of file geof_EM.bib
+ : @article{al-baali_broydens_2013
+ :                                ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 399 of file geof_EM.bib
+ : @article{snieder_2002
+ :                      ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 448 of file geof_EM.bib
+ : @article{nocedal_1980
+ :                      ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 679 of file geof_EM.bib
+ : @article{roland_2009
+ :                     ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 690 of file geof_EM.bib
+ : @incollection{pasalic_convolutional_2010
+ :                                         ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 706 of file geof_EM.bib
+ : @article{virieux_overview_2009
+ :                               ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 722 of file geof_EM.bib
+ : @book{fichtner_full_2011
+ :                         ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 737 of file geof_EM.bib
+ : @article{fichtner_2011
+ :                       ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 748 of file geof_EM.bib
+ : @article{plessix_2006
+ :                      ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 760 of file geof_EM.bib
+ : @book{nocedal_2006
+ :                   ,
+I'm skipping whatever remains of this entry
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Warning--empty journal in troltzsch_2010
+You've used 28 entries,
+            3069 wiz_defined-function locations,
+            831 strings with 9876 characters,
+and the built_in function-call counts, 16098 in all, are:
+= -- 1389
+> -- 556
+< -- 23
++ -- 270
+- -- 159
+* -- 1167
+:= -- 2380
+add.period$ -- 57
+call.type$ -- 28
+change.case$ -- 191
+chr.to.int$ -- 31
+cite$ -- 29
+duplicate$ -- 1220
+empty$ -- 1266
+format.name$ -- 237
+if$ -- 3237
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 267
+newline$ -- 91
+num.names$ -- 112
+pop$ -- 542
+preamble$ -- 1
+purify$ -- 192
+quote$ -- 0
+skip$ -- 452
+stack$ -- 0
+substring$ -- 856
+swap$ -- 651
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 237
+warning$ -- 1
+while$ -- 124
+width$ -- 0
+write$ -- 329
+(There were 10 error messages)

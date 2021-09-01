@@ -1,0 +1,622 @@
+\chapter{Fundamentos Teóricos}
+
+
+\section{Migração reversa no tempo}
+
+Há muitos métodos de migração de dados sísmicos, mas um dos métodos mais preciosos é a migração reversa no tempo. A metodologia é capaz de lidar com diversas variações de velocidade, de modo que torna-se o método atrativo para o imageamento de estruturas complexas \citep{baysal_1983}. Entretanto, o intuito físico é que os campos de onda devem correlacionar nas iterfacies refletoras, através dos campos de onda da fonte e dos receptores, essa métodologia é denominada de condição de imagem. 
+
+A condição de imagem tem como objetivo formar uma imagem, ponto a ponto, em cada intervalo temporal, para gerar uma imagem migrada a partir de uma correlação cruzada entre os campos (fonte e receptor). Matematicamente, esse método correlaciona os campos da fonte com os campos dos receptores no espaço e no tempo, então temos:
+
+\begin{eqnarray}
+ I (\mathbf{z},\mathbf{x}) = \int_{0}^{t} dt~~~ p_{f}(\mathbf{z},\mathbf{x};t)~*~ p_{r}(\mathbf{z},\mathbf{x};t)
+ \label{eq:correlation_rtm}
+\end{eqnarray}
+onde $I$ é a imagem migrada, $p_{f}$ é o campo de onda gerada pela fonte e $p_{r}$ é o campo de onda gerado pelo receptor. O campo de onda gerada pela fonte, $p_{f}$, é gerado a partir de uma aquisição sísmica utilizando um modelo de velocidade pré-determinado observado na Figura \ref{fig:rtm}, esse sinal recebido pelo receptor irá se tornar a fonte para gerar o campo de onda dos receptores,$p_{r}$, observado na Figura \ref{fig:rtm_2} e, assim, se propagar para correlacionar, ponto a ponto , para gerar a imagem.
+
+\begin{figure}[h!]
+\centering
+\subfigure[Campo de onda da fonte]{
+    \includegraphics[width=0.40\textwidth]{Figuras/rtm.pdf}
+    \label{fig:rtm}}
+  \subfigure[Campo de onda dos receptores]{
+    \includegraphics[width=0.40\textwidth]{Figuras/rtm_2.pdf}
+    \label{fig:rtm_2}}
+   
+  \caption{As Figuras mostram os processos realizados para realizar a migração reversa no tempo: (a) é o processo que gera o campo de onda da fonte que evolui para frente no tempo e (b) mostra o processo que gera o campo de onda dos receptores que evolui para trás no tempo. }
+\end{figure}
+
+ Destarte, obtêm-se os dois campos de onda (``forward'' e ``backward''), logo, é necessário aplicar a condição de imagem (correlação cruzada) da equação \ref{eq:correlation_rtm} para extrair a imagem migrada da subsuperfície estudada. Portanto, o método RTM (``Reverse time migration'' ou Migração reversa no tempo) é uma ótima ferramenta de imageamento da subsuperfície, além de ter excelentes resultados para modelos de velocidade com variações laterais. Na literatura, há muitas maneiras de aplicação desse método para obter um melhor imageamento da subsuperfície, como, por exemplo, uma aplicação é a aproximação de born, na qual essa metodologia faz com que os campos de onda tenha apenas reflexões primárias, destarte, eliminando múltiplas e outros dados não-essenciais.
+
+%Com base na função objetivo, na qual é o desajuste entre os dados observados e modelados, precisamos determinar um modelo inicial, $m_{0}$, para obter os dados modelados. Possuindo os dados observado, $d^{obs}$, o modelo inicial, $m_{0}$, e os dados observado 
+\section{FWI baseado na decomposição dos núcleos de sensibilidade}
+O intuito desse capítulo é descrever o papel da decomposição desses núcleos iterativos do FWI a partir da metodologia criada por \citet{macedo_2014}, na qual utiliza a abordagem da teoria do espalhamento para decompor os núcleos de sensibilidade \citep{tarantola_linearized_1984}. Essa decomposição é realizada para encontrar informações sobre o  modelo de fundo a partir de um campo multiplamente espalhado, pois elas se propagam através do meio por tempo longo o bastante a ponto de carregar esse tipo de informação \citep{snieder_2002}. 
+
+Ademais, se tratando de inversão não-linear convencional baseado em gradientes, a escolha de um modelo inicial será limitada e causará uma insensibilidade no comprimento de onda longo \citep{gauthier_1986,mora_1987,claerbout_1976,jannane_1989} e, assim, causando a existência de vários mínimos locais na função objetivo \citep{bunks_1995}, com isso, esses mínimos locais impedem que encontrem o mínimo global quando o modelo inicial está longe da solução global. Nos trabalhos de \citet{jannane_1989} e \citet{claerbout_1976} mostram que as baixas frequências são sensíveis quando o modelo de fundo é perturbardo e as altas frequências são sensíveis as perturbações do modelo de refletividade. Portanto, para contornar o problema de minímos locais,será  realizado a decomposição proposta, o que reparametriza o meio de referência em duas partes (fundo e singular), assim, gerando dois campos, um campo de onda de fundo sensível apenas ao modelo de fundo e um campo de onda singular sensível as duas partes do modelo e, também, dois resíduos dos campos de onda (fundo e singular) para aplicar a redecomposição para calcular os gradientes. 
+
+
+\section{Inversão de onda completa}
+
+A inversão de onda completa (FWI) baseia-se na minimização de uma função objetivo que utiliza métodos de otimização para encontrar uma solução ótima que melhor descreva os dados observados. Os dados observados, $d^{obs}$, é obtido a partir de um modelo de parâmetros real, $\mathbf{m}$, que descreve a subsuperfície. Matemáticamente, para obter o campo de excitação resultante, é necessário determinar o problema direto \citep{menke_1989}:
+
+\begin{eqnarray}
+\mathbf{d} = \mathbf{L}(\mathbf{m}),
+\label{eq:campo_direto}
+\end{eqnarray}
+\\
+onde $\mathbf{L}$ é o operador físico-matemático entre o campo de onda e o modelo. Na inversão convencional esse problema seria resolvido analiticamente encontrando o operador $\mathbf{L}^{-1}$, de modo que os parâmetros do modelo, $\mathbf{m}$, seria encontrado a partir do campo de excitação, $\mathbf{d}$, pela relação $\mathbf{m} = \mathbf{L}^{-1}(\mathbf{d})$. Contudo, na inversão de dados sísmicos, o problema de inversão é altamente não-linear e, com isso,  dificulta obter analiticamente o operador $\mathbf{L}^{-1}$. \\
+
+Além disso, se tratando no contexto de exploração sísmica, o campo obtido ao longo do tempo a partir de um modelo que representa a subsuperfície, denominamos de dado observado, $\mathbf{d}^{obs}$. Geralmente, temos informações a piori  que representaria as informações iniciais dos parâmetros do modelo, denominamos essas informações iniciais como modelo inicial, $\mathbf{m}_{0}$. Realizando a modelagem do campo, ao longo do tempo, a partir da equação \ref{eq:campo_direto} utilizamos o modelo inicial, $\mathbf{m}_{0}$, teremos os dados modelados, $\mathbf{d}^{mod}$. Com esses dados, podemos construir o problema do FWI, na qual consiste em encontrar uma estimativa do melhor modelo de velocidade a partir de sucessivas iterações, então podemos definir a função objetivo como:
+
+\begin{eqnarray}
+       \mathcal{F} = \left \| \mathbf{d}^{mod} - \mathbf{d}^{obs} \right \| ^{2}_{2} 
+\end{eqnarray}
+\\
+
+onde $\|.\|_{2}$ é a forma da norma ${l}_{2}$. A partir da definição da função objetivo, o FWI tem como objetivo principal minimizar a função objetivo para obter uma melhor estimativa do modelo de velocidade.
+\section{Núcleo de sensibilidade}
+
+
+Neste trabalho será abordado a equação da onda acústica, onde descreve a evolução do campo de onda através de um meio caracterizado por um ou dois parâmetros. Consideramos uma fonte pontual e adicionando condições iniciais, a equação da onda é definida por\\
+\begin{eqnarray}
+\frac{1}{c^{2}(\mathbf{x})} \frac{\partial^{2} p(\mathbf{x},t)}{\partial t^{2}} - \nabla^{2}p(\mathbf{x},t) = \delta(\mathbf{x}-\mathbf{x}_{s}) S(t) 
+\label{eq_wave}
+\end{eqnarray}
+\\
+onde $\mathbf{x}_{s}$ indica a posição da fonte e $S(t)$ a história da fonte (wavelet). Por questão de simplicidade e simplificação, iremos considerar um operador do campo de onda $\mathcal{L}$ que é definido por \\
+\begin{eqnarray}
+     \mathcal{L} = \frac{1}{c^{2}(\mathbf{x})} \frac{\partial^{2} }{\partial t^{2}} - \nabla^{2}
+     \label{operador_wave}
+\end{eqnarray}
+\\
+onde $c(\mathbf{x})$ é a velocidade que descreve o meio e está presente no vetor parâmetro $\mathbf{m}$. Realizamos a substituição da equação \ref{operador_wave} em \ref{eq_wave}, então \\
+
+\begin{eqnarray}
+      \mathcal{L}\left[p(\mathbf{x},t;\mathbf{x}_{s})\right] = \delta(\mathbf{x}-\mathbf{x}_{s}) S(t)
+      \label{l_wave}
+\end{eqnarray}
+\\
+onde é uma representação da forma reduzida da equação \ref{eq_wave} que usaremos na descrição teórica. A solução da equação da onda apresenta uma relação não-linear entre o funcional e vetor de parâmetros que pode ser representados por \\
+\begin{eqnarray}
+ p = f (\mathbf{m})
+ \label{funcional_p}
+\end{eqnarray}
+\\
+onde $f$ é o funcional relacionado ao campo de onda $p$ e o vetor parâmetro $m$. Esse funcional irá depender do método utilizado para a problema direto e do modelo de velocidade. \\
+
+
+%\subsection{Teoria do espalhamento}
+%\textbf{Falar um pouco da teoria} \\
+Outrossim, utilizamos a teoria clássica do espalhamento, visto que o campo total $p$ se propaga em um modelo de velocidade que descreve o meio, na qual é decomposto em duas componentes : um campo de onda de referência, $p_{0}$, e um campo de onda disperso, $p_{S}$, de modo que, a soma das duas componentes teremos o campo total ($p = p_{0} + p_{s}$). O campo de onda de referência é gerado pela fonte original referente a equação \ref{l_wave} e se propaga em um meio de referência ou meio de fundo que, geralmente, é um meio suavizado descrito por $c_{0}$. O campo de onda disperso é gerado quando o campo de onda de referência se propaga na parte desconhecida ou dispersiva do meio, esse meio pode ser descrito por $c_{S}$, essas informações podem ser observadas na Figura \ref{fig:decomposition_model}. Na aplicação, é suposto que a parte conhecida do meio contém informações de baixa frequência e a parte desconhecida contém todas as informações de alta frequência. 
+
+\begin{figure}[h!]
+\centering
+\centerline{\includegraphics[width=0.45\textwidth]{Figuras/hardmodel}}
+\centerline{\includegraphics[width=0.45\textwidth]{Figuras/background.eps}
+\hspace*{0.4cm}
+\includegraphics[width=0.45\textwidth]{Figuras/singular.eps}}
+\caption{A Figura é composta por três sub-figuras, a primera (topo) mostra o modelo exato, supomos que podemos decompor em duas partes, uma em plano suavizado (canto inferior esquerdo) e outra parte um plano com a parte da dispersão singular (canto inferior esquerdo). Portanto, gerando dois campos de onda referente aos modelos decompostos. Fonte : \citet{macedo_2014}}
+\label{fig:decomposition_model}
+\end{figure}
+ 
+Realizamos a decomposição do campo de onda e do parâmetro que descreve o meio, na qual gera as seguintes equações diferenciais. \\
+\begin{eqnarray}
+ \nonumber
+ p = p_{0} + p_{S} ~~~~~~~~~ ~~ c= c_{0} + c_{S}
+\end{eqnarray}
+
+\begin{eqnarray}
+\mathcal{L}_{0} \left[p_{0}(\mathbf{x},t;\mathbf{x}_{s}) \right] = \delta(\mathbf{x}-\mathbf{x}_{s}) S(t)
+\label{eq_l0}
+\end{eqnarray}
+
+\begin{eqnarray}
+\vspace{-0.5cm}
+\mathcal{L} \left[p_{S}(\mathbf{x},t;\mathbf{x}_{s}) \right] = - \mathcal{V} \left[p_{0}(\mathbf{x},t;\mathbf{x}_{s}) \right]
+\label{campo_singular}
+\end{eqnarray}
+onde 
+
+\begin{eqnarray}
+     \mathcal{L}_{0} = \frac{1}{c_{0}^{2}(\mathbf{x})} \frac{\partial^{2} }{\partial t^{2}} - \nabla^{2}
+     \label{operador_wave2}
+\end{eqnarray}
+\\
+onde $\mathcal{L}_{0}$ é o operador do campo de onda que é propagado em um meio de referência e $\mathcal{V}$ é definido por \\
+\begin{eqnarray}
+ \mathcal{V} = \mathcal{L} - \mathcal{L}_{0} = \left(\frac{1}{c^{2}(\mathbf{x})} - \frac{1}{c_{0}^{2}(\mathbf{x})} \right) \frac{\partial^{2}}{\partial t^{2}}
+\end{eqnarray}
+\\
+onde o operador de dispersão $\mathcal{V}$ é definido pela diferença entre os operadores de onda que se propagam em um meio ''completo'' e um de referência definidos nas equações \ref{operador_wave} e \ref{operador_wave2}, respectivamente. É possível observar que as equações \ref{eq_l0} e \ref{l_wave} é a mesma, pois utilizam a fonte original, já a equação \ref{campo_singular} possui fontes secundárias que são excitadas pelo campo de referência. Outra forma de obter o campo de onda singular é adicionar o campo total ao contraste de iluminação que atuará como fontes secundárias, então \\
+\begin{eqnarray}
+\mathcal{L} \left[p_{S}(\mathbf{x},t;\mathbf{x}_{s}) \right] = - \mathcal{V} \left[p_{0}(\mathbf{x},t;\mathbf{x}_{s}) + p_{S}(\mathbf{x},t;\mathbf{x}_{s}) \right]
+\end{eqnarray}
+\\
+\begin{eqnarray}
+\nonumber
+\mathcal{L} \left[p_{S}(\mathbf{x},t;\mathbf{x}_{s}) \right] = - \left(\frac{1}{c^{2}(\mathbf{x})} - \frac{1}{c_{0}^{2}(\mathbf{x})} \right) \left( \frac{\partial^{2} p_{0}(\mathbf{x},t)}{\partial t^{2}} + \frac{\partial^{2} p_{S}(\mathbf{x},t)}{\partial t^{2}} \right) 
+\end{eqnarray}
+\\
+onde a equação descreve a propagação do campo de onda disperso. As fontes secundárias podem ser propagadas com a ajuda da função de green, então \\
+\begin{eqnarray}
+ p_{s}(\mathbf{x},t;\mathbf{x}_{s}) = - \int_{\Omega} d^{3} \mathbf{x}^{\prime}~~ G_{0} (\mathbf{x},t;\mathbf{x}^{\prime}) * \mathcal{V} \left [ p_{0} (\mathbf{x},t;\mathbf{x}^{\prime}) +  p_{S} (\mathbf{x},t;\mathbf{x}^{\prime}) \right].
+ \label{green_ps}
+\end{eqnarray}
+\\
+onde o símbolo $*$ é definido por convolução temporal, $\Omega$ é o volume que contém todas as dispersões e $G_{0}$ é o extrapolador do campo de onda de referência. A equação \ref{green_ps} é uma integral exata que descreve a equação do campo de onda dispersiva $p_{S}$ que é o resultado da convolução do extrapolador do campo de onda de referência com as fontes secundárias em todo volume $\Omega$. É possível assumir que o campo de onda disperso é muito pequeno, logo $p_{s} \ll p_{0} $, então é possível linearizar a solução da equação da onda a partir da aproximação de born , que substituirá o campo de onda total pelo o campo de onda de referência para aproximar o campo de onda disperso. 
+É importante mencionar que a decomposição pode ser totalmente arbitrária, selecionando um modelo de referência, o potencial de dispersão é definido e os campos são determinados, de modo que não há restrições quanto a amplitude do potencial de dispersão em relação ao modelo de referência.
+
+\subsection{Linearização e representação dos núcleos de sensibilidade}
+
+De um maneira simples para a realização da decomposição, basta considerar que as partes dispersivas do meio são pequenas perturbações no modelo de referência conhecido, se $p_{S} \ll p_{0}$ o problema pode ser linearizado \citep{symes_2008}. Para considerar as pequenas pertubações no campo, é preciso considerar uma pequena perturbação no meio, $\delta \mathbf{m}$, logo $\mathbf{m} =  \mathbf{m}_{0} + \delta \mathbf{m}$. Portanto, podemos escrever de acordo com a equação \ref{funcional_p}, então \\
+\begin{eqnarray}
+ p = p_{0} + p_{S} = f (\mathbf{m}_{0} +\delta \mathbf{m}) = f(\mathbf{m}_{0}) + \Psi \delta\mathbf{m} + O\left(\left\|\delta \mathbf{m}^{2} \right\|\right)
+\end{eqnarray}
+\\
+onde $\Psi$ são as derivadas do campo de onda em relação aos parâmetros do modelo, também é conhecida como matriz de sensibilidade ou derivadas de Fréchet \citep{troltzsch_2010}. Considerando apenas perturbações de primeira ordem, o campo de onda dispersivo é definido por \\
+\begin{eqnarray}
+  p_{S} \approx \delta p = \Psi \delta m
+\end{eqnarray}
+\\
+    A expressão $\Psi$ pode ser solucionada com a ajuda de fontes secundárias ou adjuntas. A ferramenta matemática que será utilizada é o método dos estados adjuntos, que permite encontrar a derivada do campo de onda em relação aos parâmetros do modelo sem a necessidade de construir a matriz de sensibilidade que é bastante dispendiosa computacionalmente. Sendo a sua forma discretizada definida por\\
+    \begin{eqnarray}
+     \delta p = \Psi~\delta m = U~\delta c
+    \end{eqnarray}
+\\
+    onde $U$ define as derivadas de Fréchet do campo de onda total em relação aos parâmetros do modelo. 
+    
+    As fontes secundárias são funções das perturbações, logo as expressões obtidas pelas perturbações nos parâmetros do modelo, $c_{S} \approx \delta c$, logo a solução será linearizada pela  aproximação de born para perturbações de primeira ordem onde o campo de onda perturbado é definido na equação \ref{eq_perturbation_linearized} e reorganizada por \\
+    \begin{eqnarray}
+     \mathcal{L} [ \delta p(\mathbf{x},t;\mathbf{x}_{s}) ] = \frac{2~\delta c(\mathbf{x})}{c_{0}(\mathbf{x})^{3}}~\frac{\partial^{2} p_{0}(\mathbf{x},t;\mathbf{x}_{s})}{\partial t^{2}} 
+     \label{residual_wavefield_singular}
+    \end{eqnarray}
+    \\
+ De forma análoga em \ref{green_ps}, a perturbação do campo de onda em um receptor $\mathbf{x}_{g}$ pode ser representado usando a função de green , então \\
+    \begin{eqnarray}
+     \delta p (\mathbf{x}_{g},t;\mathbf{x}_{s}) = \int_{\Omega} d^{3} \mathbf{x}^{\prime}~\left[\frac{2}{c_{0}^{3}(\mathbf{x}^{\prime})}~ G_0(\mathbf{x}_{g},t,\mathbf{x}^{\prime}) * \frac{\partial^{2} p_{0}(\mathbf{x}^{\prime},t,\mathbf{x}_{s})}{\partial t^{2}}\right] ~~\delta c(\mathbf{x}^{\prime})
+     \label{born_linearized_pert}
+    \end{eqnarray}
+\\
+    onde foi utilizado a reciprocidade da função de Green, então a equação \ref{born_linearized_pert} é o campo de onda perturbado linearizado pela aproximação de born \citep{tarantola_2005}. Nessa equação, é possível perceber as parte em cochetes o núcleo do operador da derivada de Fréchet, ou seja, o núcleo de sensibilidade para o par fonte-receptor ($\mathbf{x}_{s},\mathbf{x}_{g}$).
+      
+    Como foi mencionado acima, a escolha dos modelos e dos campos podem ser arbitrários por conta da insensibilidade do método na escolha do modelo inicial, porém, a linearização é válida apenas quando o modelo de referência seja suficientemente proximo do modelo real. Portanto, problemas para validar a linearização pode aparecer devido a escolha desse modelo, pois em modelos com geologia complexa, a escolha convencional do modelo de referência e do modelo dispersivo podem falhar, assim como nos campos resultantes.
+    
+
+\section{Perturbação Decomposta}
+Na descrição acima, a decomposição utilizada era decompor o modelo em duas partes, uma parte conhecida que contém baixas frequências e uma parte desconhecida contendo conteúdo com altas frequências, e assim, linearizando o problema inverso. Mas, para válidar essa linearização, o modelo de referência tem que está próximo do modelo verdadeiro. Portanto um novo modo de decompor o modelo foi desenvolvido por \citet{macedo_2014}, onde permite a decomposição das perturbações do modelo em duas partes a partir das equações linearizadas descritas na seção anterior, e assim, aplicando essa nova metodologia de redecomposição.
+
+A redecomposição pode ser realizada em várias partes, mas será considerado a mais básica, uma decomposição em duas partes, uma parte onde as componentes decompostas do modelo de referência são arbitrários, pois é conhecido totalmente o modelo de referência e a outra parte na decomposição da perturbação do modelo, também, em duas partes . A partir disso, o modelo de referência é decomposto em duas partes, um modelo de fundo (suavizado) e outro em uma estimativa do modelo singular. 
+
+\begin{eqnarray}
+ c_{0} = c_{B} + c_{S} ~~~~~ p_{0} = p_{B} + p_{S}
+\end{eqnarray}
+\\
+onde $c_{B}$ é a componente de fundo, $c_{S}$ é a componente singular do modelo de referência, $p_{B}$ é o campo de onda em realação a componente de fundo e $p_{S}$ é o campo de onda em relação a componente singular do modelo de referência. A partir desta decomposição do modelo de referência, será aplicado, também, a decomposição da perturbação do modelo  em duas partes. Então teremos mais duas novas componentes 
+
+\begin{eqnarray}
+  \delta c = \delta c_{B} + \delta c_{S}
+\end{eqnarray}
+\\
+onde $\delta c_{B}$ é a perturbação da componente de fundo e $\delta c_{S}$ é a perturbação da componente singular do modelo de referência. Com isso, teremos quatro componentes do campo de onda, sendo os campo de onda de fundo e singular, e suas respectivas perturbações mostrados na Figura \ref{fig:decomp_simple}. Portanto,  com a realização dessa decomposição, será aplicado as equações descritas, anteriormente, para observar como ela irá afetar esse conjunto de equações, e assim, realizar uma análise semelhante da seção anterior. \\
+
+Então, as perturbações das componentes de fundo e singular do campo de onda podem ser descritas da seguinte forma \\
+
+\begin{eqnarray}
+ \begin{bmatrix}
+   \delta p_{B}  \\
+   \delta p_{S}
+\end{bmatrix}
+=
+\begin{bmatrix}
+ {U}_{B}      & 0   \\ 
+ {U}_{S}^{B}  & {U}_{S}^{S}
+\end{bmatrix}
+\begin{bmatrix}
+    {\delta c}_{B}  \\
+   {\delta c}_{S}
+\end{bmatrix}
+\label{sistema_perturbacao}
+\end{eqnarray}
+\\
+onde ${\delta c}_{B}$ e ${\delta c}_{S}$ é as versões discretizada das perturbações do modelo da parte de fundo e singular, respectivamente. Além disso, ${U}_{B}$ é o núcleo de sensibilidade  do campo de onda de fundo em relação ao modelo de fundo, ${U}_{S}^{B}$ é o núcleo de sensibilidade  do campo de onda singular em relação ao modelo de fundo e ${U}_{S}^{S}$ é o núcleo de sensibilidade  do campo de onda singular em relação ao modelo singular. 
+
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=0.8\textwidth]{Figuras/decomp_simple3.eps}
+\caption{A Figura mostra a redecomposição proposta por \citet{macedo_2014}, onde é realizado a decomposição do modelo de referência em duas partes (fundo e singular), e também, a decomposição da perturbação do modelo em outras duas partes (fundo e singular). Fonte \citet{macedo_2014}}
+\label{fig:decomp_simple}
+\end{figure}
+
+\subsection{Subnúcleo de sensibilidade}
+Agora será realizado a decomposição do subnúcleo de sensibilidade em analogia a seção anterior. Então separando o campo de onda de referência em duas partes, parte de fundo e parte singular, temos \\
+\begin{eqnarray}
+\nonumber
+ p_{0} = p_{B} + p_{S}
+\end{eqnarray}
+\\
+Relacionamos essa equação para obter o campo de onda de fundo e singular, de forma análoga ao sistema de equação \ref{eq_l0} e \ref{campo_singular}, então \\
+\begin{eqnarray}
+ \mathcal{L}_{B} \left [ p_{B}(\mathbf{x},t;\mathbf{x}_{s}) \right] = \delta (\mathbf{x} - \mathbf{x}_{s}) S(t)
+ \label{pb_basic}
+\end{eqnarray}
+\begin{eqnarray}
+ \mathcal{L}_{0} \left [ p_{S} (\mathbf{x},t;\mathbf{x}_{s}) \right] = - \mathcal{V}_{0} \left [ p_{B}(\mathbf{x},t;\mathbf{x}_{s}) \right]
+ \label{pert_sing}
+\end{eqnarray}
+onde
+
+\begin{eqnarray}
+ \nonumber
+ \mathcal{V}_{0} = \mathcal{L}_{0} - \mathcal{L}_{B} = \left(\frac{1}{c^{2}_{0}} - \frac{1}{c^{2}_{B}} \right) \frac{\partial^{2}}{\partial t^{2}}
+\end{eqnarray}
+é o potencial de dispersão de referência. Na mesma análise, o campo de onda de fundo $p_{B}$ excita as fontes secundárias para o campo de onda singular $p_{S}$. A partir disso, usaremos a função de Green para um meio de referência $G_{0}$, então o campo de onda singular é definido por  \\
+\begin{eqnarray}
+ p_{S}(\mathbf{x},t;\mathbf{x}_{S}) = - \int_{\Omega} d^{3} \mathbf{x}^{\prime}~~G_{0}(\mathbf{x},t;\mathbf{x}^{\prime}) * \mathcal{V}_{0} \left [ p_{B}(\mathbf{x}^{\prime},t;\mathbf{x}_{s}) \right]
+\end{eqnarray}
+
+
+Para preencher cada linha da equação \ref{sistema_perturbacao}, precisamos introduzir perturbações nos campos de onda de fundo e singular anteriormente definidos. Isso nos levará as fontes secundárias do resíduo dos campos $p_{B}$ e $p_{S}$.
+
+\subsubsection{Fontes secundárias para o residual do campo de onda de fundo}
+
+Para encontrar o résiduo do campo de onda de fundo, precisamos da equação mais básica para introduzir a perturbação, a equação \ref{pb_basic} é uma equação básica do campo de onda de fundo, então de forma análoga na seção anterior, perturbando o campo de onda de fundo e linearizando pela aproximação de Born, temos \\
+\begin{eqnarray}
+\mathcal{L}_{B} \left [ \delta p_{B}(\mathbf{x},t;\mathbf{x}_{S}) \right ] = - \frac{2~\delta c_{B}(\mathbf{x})}{c^{3}_{B}(\mathbf{x})}~ \frac{\partial^{2} p_{B} (\mathbf{x},t;\mathbf{x}_{S})}{\partial t^{2}}
+\label{perturb_background}
+\end{eqnarray}
+onde $\mathcal{L}_{B}$ é o operador de onda aplicado a um meio de fundo,  $\delta p_{B}$ é a perturbação do campo de onda de fundo, $c_{B}$ é a velocidade do meio de fundo e $\delta c_{B}$ é uma perturbação no meio de fundo. Então a solução da equação \ref{perturb_background} pode ser encontrada a partir da convolução com a função de Green, então podemos avaliar a solução do residual do campo de onda de fundo para uma função de Green de fundo $G_{B}$, temos \\
+\begin{eqnarray}
+ \delta p_{B} (\mathbf{x}_{g},t;\mathbf{x}_{S}) = \int_{\Omega} d^{3} \mathbf{x}^{\prime}~\left[\frac{2}{c^{3}_{B}(\mathbf{x}^{\prime})}~G_{B}(\mathbf{x}_{g},t; \mathbf{x}^{\prime}) * \frac{\partial^{2} p_{B}(\mathbf{x}^{\prime},t;\mathbf{x}_{S})}{\partial t^{2}} \right] \delta c_{B}(\mathbf{x}^{\prime})
+\end{eqnarray}
+\\
+onde essa equação é representada pela primeira linha da equação \ref{sistema_perturbacao}, $\delta p_{B}={U}_{B} {\delta c}_{B}$. A parte que está em cochetes, é o núcleo de sensibilidade referente ao campo de onda de fundo em relação a parte do modelo de fundo para o par fonte-receptor ($\mathbf{x}_{s}, \mathbf{x}_{g}$). 
+
+\subsubsection{Fontes secundárias para o residual do campo de onda singular}
+
+Para solucionar a segunda linha da equação \ref{sistema_perturbacao}, será preciso encontrar as fontes secundárias que excitam a perturbação do campo de onda singular, então partimos da equação \ref{residual_wavefield_singular} que já está linearizada, então \\
+\begin{eqnarray}
+\nonumber
+ \mathcal{L}_{0} [\delta p (\mathbf{x},t;\mathbf{x}_{s}) ] = - \delta \mathcal{L} [ p_{0}(\mathbf{x},t;\mathbf{x}_{s}) ]
+ \end{eqnarray}
+ onde 
+ \begin{eqnarray}
+ \nonumber
+ \delta \mathcal{L} [ p_{0}(\mathbf{x},t;\mathbf{x}_{s}) ]=  \frac{2~\delta c}{c_{0}^{3}}~\frac{\partial^{2} p_{0}(\mathbf{x},t;\mathbf{x}_{s})}{\partial t^{2}}
+ \end{eqnarray}
+\\
+realizando a decomposição na perturbação do campo de onda total e do campo de onda de referência, e aplicando na equação \ref{residual_wavefield_singular}, então \\
+\begin{eqnarray}
+ \nonumber
+ \delta p = \delta p_{B} + \delta p_{S} ~~~~~~~ ~~~~~~~~   p_{0} = p_{B} + p_{S} 
+\end{eqnarray}
+\begin{eqnarray}
+ \mathcal{L}_{0} [\delta p_{B} + \delta p_{S} ] = -\delta \mathcal{L} [ p_{B} + p_{S} ]
+\end{eqnarray}
+\\
+separando os operadores para os respectivos campos e realizando uma identidade $\mathcal{L}_{0} = \mathcal{V}_{0} + \mathcal{L}_{B}$ e utilizando a definição da equação \ref{perturb_background}, então \\
+\begin{eqnarray}
+ \mathcal{L}_{0} [\delta p_{S} ] = - \delta \mathcal{L} [ p_{B}]  - \delta\mathcal{L}[ p_{S} ] - \mathcal{V}_{0} [\delta p_{B}] - \mathcal{L}_{B}[\delta p_{B}] 
+ \label{perturbation_singular}
+\end{eqnarray}
+\\
+onde $\delta \mathcal{L}$ é o operador de onda linearizado. A perturbação do campo de onda singular depende de 4 fontes secundárias, onde explicitará os diferentes níveis de iteração contendo informações dispersas e refletidas em um único ou em vários dados. Para encontrar a solução da equação \ref{perturbation_singular} utilizamos a função de Green com o extrapolador do campo de onda para o meio de referência $G_{0}$ e substituindo todas as fontes secundárias por $\Delta s$, então \\
+\begin{eqnarray}
+ \delta p_{S} (\mathbf{x},t;\mathbf{x}_{S}) = \int _{\Omega} d^{3} \mathbf{x}^{\prime}~~ G_{0}(\mathbf{x},t;\mathbf{x}^{\prime})  * \Delta s (\mathbf{x}^{\prime},t;\mathbf{x}_{s})
+ \label{eq:green_part}
+\end{eqnarray}
+\\
+onde $G_{0}$ é a função de Green para o operador de onda de referência $\mathcal{L}_{0}$. A partir dessa equação, iremos decompor também a função de Green, obtendo a sua parte de fundo e a sua parte singular, então  \\
+\begin{eqnarray}
+\label{eq:decomposition_green}
+ G_{0} = G_{B} + G_{S}
+\end{eqnarray}
+\\
+onde $G_{B}$ é a função Green para o meio de fundo que sastifaz a equação \ref{perturb_background} como uma fonte impulsiva pontual e $G_{S}$ é a função de Green para o meio singular que satisfaz a equação \ref{pert_sing} como um fonte secundária excitada pela função de Green da parte de fundo $G_{B}$. A função de Green para a parte singular é definida por \\
+\begin{eqnarray}
+ G_{S} = G_{0} - G_{B}
+\end{eqnarray}
+\\
+onde $G_{S}$ será a diferença entre as funções de Green para o meio de referência e para o meio de fundo, respectivamente. Então substituindo a equação \ref{eq:decomposition_green} em \ref{eq:green_part} e considerando todas as fontes secundárias, teremos 8 termos para o residual do campo de onda singular, então
+\begin{eqnarray}
+\begin{aligned}
+\delta p_{S}\left(\boldsymbol{x}_{g}, t ; \boldsymbol{x}_{s}\right) &=\sum_{i=1}^{n=8} \delta p_{S, i}\left(\boldsymbol{x}_{g}, t ; \boldsymbol{x}_{s}\right)=\\
+&-\int_{\mathbf{V}} d^{3} \boldsymbol{x}^{\prime} G_{S}\left(\boldsymbol{x}_{g}, t ; \boldsymbol{x}^{\prime}\right) * \mathcal{V}_{0}\left[\delta p_{B}\left(\boldsymbol{x}^{\prime}, t ; \boldsymbol{x}_{s}\right)\right] \\
+&-\int_{\mathbf{V}} d^{3} \boldsymbol{x}^{\prime} G_{B}\left(\boldsymbol{x}_{g}, t ; \boldsymbol{x}^{\prime}\right) * \mathcal{V}_{0}\left[\delta p_{B}\left(\boldsymbol{x}^{\prime}, t ; \boldsymbol{x}_{s}\right)\right] \\
+&-\int_{\mathbf{V}} d^{3} \boldsymbol{x}^{\prime} G_{S}\left(\boldsymbol{x}_{g}, t ; \boldsymbol{x}^{\prime}\right) * \delta \mathcal{L}\left[p_{B}\left(\boldsymbol{x}^{\prime}, t ; \boldsymbol{x}_{s}\right)\right] \\
+&-\int_{\mathbf{V}} d^{3} \boldsymbol{x}^{\prime} G_{B}\left(\boldsymbol{x}_{g}, t ; \boldsymbol{x}^{\prime}\right) * \delta \mathcal{L}\left[p_{B}\left(\boldsymbol{x}^{\prime}, t ; \boldsymbol{x}_{s}\right)\right] \\
+&-\int_{\mathbf{V}} d^{3} \boldsymbol{x}^{\prime} G_{S}\left(\boldsymbol{x}_{g}, t ; \boldsymbol{x}^{\prime}\right) * \delta \mathcal{L}\left[p_{S}\left(\boldsymbol{x}^{\prime}, t ; \boldsymbol{x}_{s}\right)\right] \\
+&-\int_{\mathbf{V}} d^{3} \boldsymbol{x}^{\prime} G_{B}\left(\boldsymbol{x}_{g}, t ; \boldsymbol{x}^{\prime}\right) * \delta \mathcal{L}\left[p_{S}\left(\boldsymbol{x}^{\prime}, t ; \boldsymbol{x}_{s}\right)\right] \\
+&+\int_{\mathbf{V}} d^{3} \boldsymbol{x}^{\prime} G_{S}\left(\boldsymbol{x}_{g}, t ; \boldsymbol{x}^{\prime}\right) * \delta \mathcal{L}_{B}\left[p_{B}\left(\boldsymbol{x}^{\prime}, t ; \boldsymbol{x}_{s}\right)\right] \\
+&+\int_{\mathbf{V}} d^{3} \boldsymbol{x}^{\prime} G_{B}\left(\boldsymbol{x}_{g}, t ; \boldsymbol{x}^{\prime}\right) * \delta \mathcal{L}_{B}\left[p_{B}\left(\boldsymbol{x}^{\prime}, t ; \boldsymbol{x}_{s}\right)\right]
+\end{aligned}
+\label{pert_sing_full}
+\end{eqnarray}
+\\
+onde utilizamos a reciprocidade da função de Green para as duas últimas integrais, os termos são numerados de cima para baixo, onde o primeiro termo é representado por $\delta p_{s,1}$, e assim, sucessivamente. A equação \ref{pert_sing_full} possui a mesma estrutura para todos os termos, uma convolução da função de Green (extrapolador de onda) com o termo da fonte secundária. Esse extrapolador leva a energia das fontes secundárias para o receptor e essa fonte é representada pelo operador de espalhamento $\delta \mathcal{L}$ e pelos campos de onda da fonte que excitou essa fonte.   
+Analisando o último termo, $\delta p_{S,8}$, é a perturbação do campo de onda de fundo, temos \\
+\begin{eqnarray}
+\nonumber
+   \delta p_{S} - \delta p_{S,8} = \delta p_{S} + \delta p_{B} = \delta p ~~~\\ \nonumber \\
+ \delta p(\mathbf{x}_{g},t;\mathbf{x}_{s}) = \sum_{i=1}^{n=7} \delta p_{S,i}(\mathbf{x}_{g},t;\mathbf{x}_{s})
+\end{eqnarray}
+\\
+onde os 7 termos da perturbação do campo de onda singular produz a perturbação total dos campos de onda. A importância da decomposição do modelo de referência nos dar a possibilidade de analisar as contribuições individualmente e reconhecer a importância das contribuições das dispersões múltiplas da parte singular do modelo de referência. 
+
+\section{Análise das contribuições da redecomposição}
+Como descrito na seção anterior, a decomposição do modelo de referência permite analisar as contribuições de forma individual para o campo de onda para as componentes de fundo e singular. A parte mais importante são as contribuições das dispersões múltiplas geradas pela parte singular (desconhecida) do modelo de referência. A partir disso, vamos realizar uma interpretação física das contribuições de forma individual para a parte de fundo e singular.  \\
+
+\begin{figure}[h!]
+  \centering
+  \subfigure[$\delta p_{S,3}$]{
+    \includegraphics[width=0.40\textwidth]{Figuras/image4.pdf}
+    \label{fig:ps_1}}
+  \subfigure[$\delta p_{S,4}$]{
+    \includegraphics[width=0.40\textwidth]{Figuras/image1.pdf}
+    \label{fig:ps_2}} \\
+  \subfigure[$\delta p_{S,6}$ ]{
+    \includegraphics[width=0.40\textwidth]{Figuras/image3.pdf}
+    \label{fig:ps_3}}
+  \subfigure[$\delta p_{B}$ ]{
+    \includegraphics[width=0.40\textwidth]{Figuras/image2.pdf}
+    \label{fig:ps_4}}
+    \caption{Contribuições de diferentes termos da equação \ref{pert_sing_full} com informações de espalhamento/reflexões único ou múltiplo. A Figura (a) e (c) mostra as contribuições dos eventos de dispersão múltipla com a diferença do tipo de campo que é excitado a fonte secundária. A Figura (b) e (d) mostra as contribuições dos eventos de dispersão única com a diferença do operador da fonte secundária que utiliza informação do modelo de referência (parte de fundo).  }
+    \label{multiple}
+\end{figure}
+\\
+
+Agora vamos observar os termos individuais dos resíduos dos campos de onda que apresentam termos apenas com dispersão única  e termos com dispersão múltipla. Os termos com dispersão única é descrito por \\
+\begin{eqnarray}
+ \delta p_{S,4}(\mathbf{x}_{g},t;\mathbf{x}_{s}) = - \int_{\Omega}d^{3} \mathbf{x}^{\prime} ~~~~~~ \color{blue}{G_{B}(\mathbf{x}_{g},t;\mathbf{x}^{\prime})}~~~*~~~\color{red}{\delta \mathcal{L}\left[p_{B}(\mathbf{x}^{\prime},t;\mathbf{x}_{s}) \right]}
+\label{eq:single_scattering1}
+\end{eqnarray}
+\\
+onde a parte em azul é o extrapolador do campo de onda utilizando a parte de fundo do modelo de referência e em vermelho é o campo de onda de fundo excitando a fonte secundária total.Outro termo apresentando informação de dispersão única é definido por \\
+\begin{eqnarray}
+\delta p_{B}(\mathbf{x}_{g},t;\mathbf{x}_{s}) = - \int_{\Omega}d^{3} \mathbf{x}^{\prime} ~~~~~~ \color{green}{G_{B}(\mathbf{x}_{g},t;\mathbf{x}^{\prime})}~~~*~~~\color{red}{\delta \mathcal{L}_{B}\left[p_{B}(\mathbf{x}^{\prime},t;\mathbf{x}_{s}) \right]}
+\label{eq:single_scattering2}
+\end{eqnarray}
+\\
+onde a parte em verde é o extrapolador do campo de onda utilizando a parte de fundo do modelo de referência e em vermelho é o campo de onda de fundo excitando a fonte secundária da parte de fundo do modelo de referência. As Figuras \ref{fig:ps_2} e \ref{fig:ps_4} é representadas pelas equações \ref{eq:single_scattering1} e \ref{eq:single_scattering2}, respectivamente. Já as Figuras \ref{fig:ps_1} e \ref{fig:ps_3} apresenta exemplos de termos com dispersão única e termos com dispersões múltiplas nas singularidades do modelo não perturbado. As equações que representam essas figuras são descritas por \\
+\begin{eqnarray}
+ \delta p_{S,3}(\mathbf{x}_{g},t;\mathbf{x}_{s}) = - \int_{\Omega}d^{3} \mathbf{x}^{\prime} ~~~~~~ \color{blue}{G_{S}(\mathbf{x}_{g},t;\mathbf{x}^{\prime})}~~~*~~~\color{red}{\delta \mathcal{L}\left[p_{B}(\mathbf{x}^{\prime},t;\mathbf{x}_{s}) \right]}
+\label{eq:single_scattering3}
+\end{eqnarray}
+\\
+onde a parte em azul é o extrapolador do campo de onda utilizando as singularidades do modelo de referência e em vermelho é o campo de onda de fundo excitando a fonte secundária total. Essa equação representa a dispersão única, já a equação que representa a dispersão múltipla é definida por \\
+\begin{eqnarray}
+ \delta p_{S,6}(\mathbf{x}_{g},t;\mathbf{x}_{s}) = - \int_{\Omega}d^{3} \mathbf{x}^{\prime} ~~~~~~ \color{blue}{G_{B}(\mathbf{x}_{g},t;\mathbf{x}^{\prime})}~~~*~~~\color{red}{\delta \mathcal{L}\left[p_{S}(\mathbf{x}^{\prime},t;\mathbf{x}_{s}) \right]}
+\label{eq:single_scattering4}
+\end{eqnarray}
+\\
+onde a parte em azul é o extrapolador do campo de onda utilizando a parte de fundo do modelo de referência e em vermelho é o campo de onda singular excitando a fonte secundária total. A dispersão múltipla é observada no campo de onda do lado da fonte, de acordo com a Figura \ref{eq:single_scattering4}. 
+As análises podem ser realizadas de forma análoga para os outros termos que compõem as equações para $\delta p_{S,i}$, os termos que realizamos as análises foram para $i=3,4,6,8$. Essas equações podem ainda ser mais decompostas, pela contrubuição da parte de fundo e da parte singular para as fontes secundárias total, e assim, observar de forma mais categórica os eventos de dispersão única e múltipla.
+\subsection{Contribuição da parte de fundo e singular}
+Para observar a contribuição de cada parte, precisamos buscar o operador de onda perturbado linearizado total $\delta \mathcal{L}$ que conhecemos como a fonte secundária de alguns termos da equação \ref{pert_sing_full}, então temos que \\
+\begin{eqnarray}
+\delta \mathcal{L} = -  \left \{ \left(\frac{2~\left (\delta c_{B} + \delta c_{S}\right)}{\left(c_{B}+ c_{S}\right)^{3}}\right) \frac{\partial^{2}}{\partial t^{2}}\right \} 
+\end{eqnarray}
+\\
+onde $\delta c_{B}$ é a perturbação do modelo de referência da parte de fundo e $\delta c_{S}$ é a perturbação do modelo de referência da parte singular. A partir disso, separamos o operador perturbado em duas partes, então \\
+\begin{eqnarray}
+\delta \mathcal{B}  = -   \left \{ \left(\frac{2~\delta c_{B}}{\left(c_{B}+ c_{S}\right)^{3}}\right) \frac{\partial^{2}}{\partial t^{2}}\right \}
+\label{eq:part_background} 
+\end{eqnarray}
+e
+\begin{eqnarray}
+\delta \mathcal{S}  = -  \left \{ \left(\frac{2~\delta c_{S}}{\left(c_{B}+ c_{S}\right)^{3}}\right) \frac{\partial^{2}}{\partial t^{2}}\right \}
+\label{eq:part_singular} 
+\end{eqnarray}
+\\
+As equações \ref{eq:part_background} e \ref{eq:part_singular} é o potencial secundário para a contribuição das partes de fundo e singular, respectivamente. A soma dessas duas partes é o potencial secundário total $\delta \mathcal{L} = \delta \mathcal{B} + \delta \mathcal{S} $. 
+
+Aplicando essa decomposição nas perturbações do campo de onda da parte singular para o termo $i=4$, então \\
+
+\begin{eqnarray}
+ \delta p_{S,4} = \delta p_{S,4B} + \delta p_{S,4S}
+ \label{eq:contribuicao1}
+\end{eqnarray}
+\\
+onde os dois termos são correspondentes as duas contribuições do potencial secundário $\delta \mathcal{B}$ e $\delta \mathcal{S}$. A partir disso, vamos encontrar a solução dessa equação para a contribuição da parte singular aplicando a função de Green, temos que \\
+\begin{eqnarray}
+ \delta p_{S,4S} = - \int_{\Omega} d^{3} \mathbf{x}^{\prime} ~~ \left [ \frac{2}{\left(c_{B}(\mathbf{x}^{\prime}) + c_{S}(\mathbf{x}^{\prime}) \right)^{3}}~G_{B}(\mathbf{x}_{g},t;\mathbf{x}^{\prime})~*~ \frac{\partial ^{2} p_{B}(\mathbf{x}^{\prime},t;\mathbf{x}_{s})}{\partial t^{2}} \right ] \delta c_{S}(\mathbf{x}^{\prime})  
+\end{eqnarray}
+ \\
+O termo em cochetes descreve o núcleo de sensibilidade com a contribuição da parte singular do potencial secundário do termo $\delta p_{S,4}$ que é representado por $U^{S}_{S,4}$ da equação \ref{sistema_perturbacao} e a matriz de sensibilidade para a contribuição da parte de fundo $U^{B}_{S,4}$. Para os  termos que possui o potencial secundário $(i=3,5,6)$ é realizado de forma análoga para todas as contribuições. Portanto, a equação \ref{sistema_perturbacao} pode ser reescrita, então \\
+ \begin{eqnarray}
+ \begin{bmatrix}
+   \delta p_{B}  \\
+   \delta p_{S}
+\end{bmatrix}
+=
+\begin{bmatrix}
+ {U}_{B}      & 0   \\ 
+~~ \sum_{i}{U}_{S,i}^{B}  & \sum_{j}{U}_{S,j}^{S}~~
+\end{bmatrix}
+\begin{bmatrix}
+    {\delta c}_{B}  \\
+   {\delta c}_{S}
+\end{bmatrix}
+\label{sistema_perturbacao}
+\end{eqnarray}
+
+onde a contribuição com a parte de fundo possui 8 termos $i=1,2,3,4,5,6,7,8$ e a parte singular possui 4 termos $j=3,4,5,6$, mostrados na Figura \ref{fig:subnucleo}. Esses são os subnúcleos para avaliar as perturbação dos campos de onda, um subnúcleo apenas para avaliar a parte de fundo da perturbação do campo de onda, $\delta p_{B}$, 8 subnúcleos com a contribuição da parte de fundo e 4 subnúcleos com a contribuição da parte singular para avaliar a perturbação do campo de onda singular, $\delta p_{S}$. 
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width = 0.50\linewidth]{Figuras/kernel_decomp13.eps} 
+\caption{Sub-núcleos obtidos a partir da decomposição do núcleo de sensibilidade $U$ para perturbação do modelo de velocidade. Fonte: \citep{macedo_2014}}
+\label{fig:subnucleo}
+\end{figure}
+
+Essa notação numerada utilizada será substituída, pois para ter um melhor entendimento de qual ação física está ocorrendo no subnúcleo, e também, para ter uma melhor identificação do mesmo para utiliza-lo futuramente em algum experimento. Por esse motivo, é utilizada a renomeação proposta por \citet{macedo_2014} para todos os termos com base na ação física como, por exemplo, $\delta p_{S,\alpha\beta\gamma}$, onde cada um desses subscritos $\alpha,\beta,\gamma$ represente a ação física envolvida na contribuição de cada subnúcleo. \\
+
+Nessa proposta, o primeiro subscrito, $\alpha$, corresponde ao campo de onda responsável pela propagação da contribuição no lado da fonte, o segundo subscrito, $\beta$, corresponde o operador potencial que representa as fontes secundárias, e por fim, o terceiro subscrito, $\gamma$, representa o campo de onda responsável pela propagação da contribuição no lado do receptor. Agora para identificar cada ação, começaremos pelo primeiro índice, $\alpha$, que pode ser identificado por três tipos de contribuição, além da contribuição de fundo, $B$, e singular, $S$, tem-se a contrubuição do residual do campo de onda devido à perturbação de fundo, $\delta p_{B}$, que será representado por $b$. O segundo índice, $\beta$, é responsável por quatro tipos de fontes secundárias, classificadas pelos operadores $\mathcal{L}$, $\mathcal{B}$, $\mathcal{S}$ e $\mathcal{V}$, representando o potencial da contribuição da componente de fundo $\delta \mathcal{L}_{B}$, as contribuição da parte de fundo, $\delta \mathcal{B}$, e singular, $\delta \mathcal{S}$, do potencial secundário, e por fim, o potencial de espalhamento, $\mathcal{V}_{0}$. Finalmente, o terceiro índice, $\gamma$, o subscrito que corresponde o campo de onda responsável pela propagação do lado da fonte, as contribuições será em duas partes representada por, $B$, devido a componente de fundo e ,$S$, devido a contribuição da componente singular do modelo. \\
+
+Aplicando essa nomenclatura na equação \ref{eq:contribuicao1}, o termo dessa equação é separado em duas contribuição do operador potencial de fonte secundária. Para a contribuição de fundo da fonte secundária termos o termo, $\delta p_{S,B\mathcal{B}B}$, onde termos o primeiro que representa o campo de onda com a contribuição da componente de fundo, $B$,ao lado da fonte, o segundo representa a contribuição da componente de fundo do operador potencial da fonte secundária,  $\mathcal{B}$, e por fim, o terceiro representa a contribuição da componente de fundo, $B$, para a propagação do campo de onda ao lado do receptor. Para observar a interpretação física de todos os treze subnúcleos a partir da Figura \ref{fig:subnucleo_treze}, onde as sub-legendas são representas pelas as antigas nomenclaturas númericas e substituídas pela nova nomenclatura proposta.  \\
+
+\begin{figure}[h!]
+  \centering
+  \subfigure[$\delta p_B$]{
+    \includegraphics[width=0.20\textwidth]{Figuras/0B0.eps}
+    \label{fig:dp0(2)}} \\
+%  \hspace{12cm}
+  \subfigure[$\delta p_{S,-B\mathcal{L} B} = \delta p_{S,8}$]{
+    \includegraphics[width=0.20\textwidth]{Figuras/x-0B0.eps}
+    \label{fig:dps.-0B0}}
+  \subfigure[$\delta p_{S,-B\mathcal{L} S} = \delta p_{S,7}$]{
+    \includegraphics[width=0.20\textwidth]{Figuras/x-0BS.eps}
+    \label{fig:dps.-0BS}}
+  \subfigure[$\delta p_{S,b\mathcal{V} B} = \delta p_{S,2}$]{
+    \includegraphics[width=0.20\textwidth]{Figuras/0B0V0.eps}
+    \label{fig:dps.bV0}}
+  \subfigure[$\delta p_{S,b\mathcal{V} S} = \delta p_{S,1}$]{
+    \includegraphics[width=0.20\textwidth]{Figuras/0B0VS.eps}
+    \label{fig:dps.bVs}} \\
+  \subfigure[$\delta p_{S,B\mathcal{B} B} = \delta p_{S,4B}$]{
+    \includegraphics[width=0.20\textwidth]{Figuras/0b0.eps}
+    \label{fig:dps.0cB0}}
+  \subfigure[$\delta p_{S,B\mathcal{B} S} = \delta p_{S,3B}$]{
+    \includegraphics[width=0.20\textwidth]{Figuras/0bS.eps}
+    \label{fig:dps.0cBs}}
+  \subfigure[$\delta p_{S,S\mathcal{B} B} = \delta p_{S,6B}$]{
+    \includegraphics[width=0.20\textwidth]{Figuras/Sb0.eps}
+    \label{fig:dps.scB0}}
+  \subfigure[$\delta p_{S,S\mathcal{B} S} = \delta p_{S,5B}$]{
+    \includegraphics[width=0.20\textwidth]{Figuras/SbS.eps}
+    \label{fig:dps.scBs}} \\
+  %\hspace{9cm}
+  \subfigure[$\delta p_{S,B\mathcal{S} B} = \delta p_{S,4S}$]{
+    \includegraphics[width=0.20\textwidth]{Figuras/0s0.eps}
+    \label{fig:dps.0cS0}}
+  \subfigure[$\delta p_{S,B\mathcal{S} S} = \delta p_{S,3S}$]{
+    \includegraphics[width=0.20\textwidth]{Figuras/0sS.eps}
+    \label{fig:dps.0cSs}}
+  \subfigure[$\delta p_{S,S\mathcal{S} B} = \delta p_{S,6S}$]{
+    \includegraphics[width=0.20\textwidth]{Figuras/Ss0.eps}
+    \label{fig:dps.scS0}}
+  \subfigure[$\delta p_{S,S\mathcal{S} S} = \delta p_{S,5S}$]{
+    \includegraphics[width=0.20\textwidth]{Figuras/SsS.eps}
+    \label{fig:dps.scSs}}
+\caption{Significado físico dos subkernels. Cada um dos desenhos mostra três elementos: campo de ondas do lado da fonte; o operador que gera a fonte secundária; e o extrapolador do campo de ondas do lado do receptor. Subcategorias indicam o novo nome e correspondência com a nomenclatura numerada anterior. Fonte: \citet{macedo_2014}} \label{fig:subnucleo_treze}
+\end{figure}
+
+
+As substituições nas nomenclaturas nas derivadas de Frechét pode ser representada de forma análoga aos termos mostrados na Figura \ref{fig:subnucleo_treze}. Mas, para as contribuições do operador potencial secundária, onde tem-se a separação das componentes que corresponde as contribuições na fonte secundárias serão consideradas iguais, tornado-os desnecessários na inclusão nas derivadas de Fréchet.  Portanto, consideramos as seguintes definições em referência a equação \ref{sistema_perturbacao}:
+
+\begin{eqnarray}
+ \overline{U}^{B}_{S} = \sum_{i} \overline{U}_{S,i},
+\end{eqnarray}
+\begin{eqnarray}
+ \overline{U}^{S}_{S} = \sum_{i} \overline{U}_{S,j},
+\end{eqnarray}
+\\
+onde $i$ $=$ $b\mathcal{V}S$, $b\mathcal{V}B$, $BS$, $BB$, $SS$, $SB$, $−B
+\mathcal{L}S$, $−B\mathcal{L}B$, e $j$ $=$ $BS$, $BB$, $SS$, $SB$. A partir dessa nomenclatura, podemos analisar as derivadas de Fréchet a partir das contribuição de cada índice descrito acima, então uma contribuição da componente singular da perturbação do campo de onda é definida como
+
+\begin{eqnarray}
+ \delta p_{S,b\mathcal{V}S} = \overline{U}_{S,b\mathcal{V}S}~\overline{\delta c_{B}} 
+\end{eqnarray}
+\\
+onde $\overline{U}_{S,b\mathcal{V}S}$ herda os subscritos determinados pela nomenclatura de cada contribuição, sugerido pela proposta da análise interpretativa para cada termo. Portanto, as derivadas de Fréchet ou subnúcleos de sensibilidade serão interpretados de acordo com cada ação imposta na perturbação do campo de onda.
+
+
+\section{Retroprojeção dos resíduos nos espaços dos modelos}  
+
+Se tratando de inversão, afim de atualizar o modelo, é de grande importância retroprojetar os resíduos dos campos de onda contendo cada contribuição para utilizar na inversão linearizada. Para obter a retroprojeção dos resíduos nos espaço dos modelo, se faz necessário a utilização do método dos estados adjuntos \citep{fichtner_2011, plessix_2006,fichtner_full_2011,virieux_overview_2009}  que  permite a projeção retroativa dos résiduos do campo de onda no espaço dos modelos com a ajuda dos núcleos de sensibilidade para estimar as perturbações do modelo. \\
+
+Convencionalmente, utilizando o residual total do campo de onda, é possível estimar as perturbações do modelo de velocidade, $\delta c^{est}$, que podem ser obtidos por meio do método adjunto. Com isso, podemos retrojetar o résiduo total do campo de onda de acordo com
+\begin{eqnarray}
+ \delta c^{est} = \overline{U}^{\dagger}~\delta p
+\end{eqnarray}
+\\
+onde o subscrito $\dagger$ determina o operador adjunto. \\
+
+A partir da análise da retroprojeção do resíduo do campo de onda no espaço dos modelos, será possível realizar essa formulação para aplicar a forma decomposta dos resíduais e subnúcleos de sensibilidade. Sob a separação das componentes de fundo e singular proposto até aqui, é possível estimar as perturbações do modelo para as duas componentes através da projeção retroativa dos résiduos. Então, as estimativas das perturbações do modelo é dada como:
+
+ \begin{eqnarray}
+ \begin{bmatrix}
+   \delta c^{est}_{B}  \\
+   \delta c^{est}_{S}
+\end{bmatrix}
+=
+\begin{bmatrix}
+   \delta c^{est}_{B,B} + \sum_{i} \delta c^{est}_{B,i}  \\
+      \sum_{j}  \delta c^{est}_{S,j}
+\end{bmatrix}
+=
+\begin{bmatrix}
+~~\overline{U}^{\dagger}_{B}      &  \sum_{i} \overline{U}_{S,i}~~    \\ 
+~~ 0  & \sum_{j}\overline{U}^{\dagger}_{S,j}~~
+\end{bmatrix}
+\begin{bmatrix}
+    {\delta p}_{B}  \\
+   {\delta p}_{S}
+\end{bmatrix}
+\label{sistema_perturbacao}
+\end{eqnarray}
+\\
+onde os índices de soma assumem novamente os valores $i$ $=$ $b\mathcal{V}S$, $b\mathcal{V}B$, $BS$, $BB$, $SS$, $SB$,      $−B\mathcal{L}S$, $−B\mathcal{L}B$ e $j$ $=$ $BB$, $BS$, $SB$, $SS$.
+
+Para encontrar o significado das expressões à uma forma representativa, conforme \citep{tarantola_linearized_1984,liu_improved_2015}. Utilizaremos a equação \ref{eq:contribuicao1} apenas para a contribuição da componente de fundo da perturbação no domínio da frequência, temos:
+
+\begin{eqnarray}
+\label{eq:representation_background1}
+    \hat{\delta p}_{S, B\mathcal{B}B}(\mathbf{x}_{g}, \mathbf{x}_{s}) = - \int_{\Omega} d^{3}\mathbf{x}^{\prime}~ \hat{G}_{B}(\mathbf{x}^{\prime}; \mathbf{x}_{s}) ~ \delta \mathcal{B}\left[ \hat{p}_{B}(\mathbf{x}^{\prime},\mathbf{x}_{s}) \right],
+   % 
+\end{eqnarray}
+\\
+
+substituindo $\delta \mathcal{B}$ na equação \ref{eq:representation_background1}, temos:
+
+\begin{eqnarray}
+  \hat{\delta p}_{S, B\mathcal{B}B}(\mathbf{x}_{g}, \mathbf{x}_{s}) =  \int_{\Omega} d^{3}~\mathbf{x}^{\prime}~ \frac{-2~\omega^{2}}{c_{0}^{3}(\mathbf{x}^{\prime})}~ \hat{G}_{B}(\mathbf{x}^{\prime}; \mathbf{x}_{s}) ~\hat{p}_{B}(\mathbf{x}^{\prime},\mathbf{x}_{s})~ \delta c_{B}(\mathbf{x}^{\prime}),
+\end{eqnarray}
+\\
+discretizando essa equação com a integral volumétrica no domínio da frequência, temos que:
+\begin{eqnarray}
+  \hat{\delta p}_{S, B\mathcal{B}B}(\mathbf{x}_{g}, \mathbf{x}_{s})
+   =
+ \begin{bmatrix}
+  ~~~\frac{-2~\omega^{2}}{c_{0}^{3}(\mathbf{x}_{1}^{\prime})}~ \hat{G}_{B}(\mathbf{x}_{1}^{\prime}; \mathbf{x}_{s}) ~\hat{p}_{B}(\mathbf{x}_{1}^{\prime},\mathbf{x}_{s})~~~~ \cdots ~~~~\\
+ \end{bmatrix}
+\begin{bmatrix}
+\delta c_{B}(\mathbf{x}_{1}^{\prime}) \\
+\vdots \\
+\delta c_{B}(\mathbf{x}_{n}^{\prime})
+\end{bmatrix}
+\end{eqnarray}
+\\
+onde o súbnúcleo de sensibilidade $\overline{U}_{B,BB}$ (primeira matriz) representa a derivada de Fréchet para a contribuição de fundo para encontrar o resídual do campo de onda singular com a perturbação da componente de fundo do modelo, $\delta c_{B}$, em $\mathbf{x}^{\prime}$.
+
+Aplicando a retroprojeção do resíduo no espaço dos modelos a partir do operador adjuntos, temos
+
+\begin{eqnarray}
+\nonumber
+ \overline{\delta c}^{\text{est}}_{B,BB}(\mathbf{x}_{g},\mathbf{x}_{s}) =
+ \begin{bmatrix}
+     \delta c^{\text{est}}_{B,BB}(\mathbf{x}^{\prime}_{1}|\mathbf{x}_{s},\mathbf{x}_{g}) \\
+     \vdots \\
+     \delta c^{\text{est}}_{B,BB}(\mathbf{x}^{\prime}_{N}|\mathbf{x}_{s},\mathbf{x}_{g})
+ \end{bmatrix}
+ \approx
+ \begin{bmatrix}
+      \frac{-2~\omega^{2}}{c_{0}^{3}(\mathbf{x}_{1}^{\prime})}~ \hat{G}^{*}_{B}(\mathbf{x}_{1}^{\prime};\mathbf{x}_{s}) \hat{p}^{*}_{B}(\mathbf{x}_{1}^{\prime},\mathbf{x}_{s}) \\
+          \vdots \\
+           \frac{-2~\omega^{2}}{c_{0}^{3}(\mathbf{x}_{N}^{\prime})}~ \hat{G}^{*}_{B}(\mathbf{x}_{N}^{\prime}; \mathbf{x}_{s}) ~\hat{p}^{*}_{B}(\mathbf{x}_{N}^{\prime},\mathbf{x}_{s}) \\
+ \end{bmatrix}
+ \hat{\delta p}_{s}(\mathbf{x}_{g};\mathbf{x}_{s})
+\end{eqnarray}
+\begin{eqnarray}
+  \label{eq:est_background}
+\end{eqnarray}
+
+\\
+
+Por fim, a soma de todas as fontes e receptores dará estimativa geral da perturbação do modelo, conforme a equação \ref{eq:est_background}. A partir dessa equação, mostraremos na forma integral a estimava geral da perturbação do modelo, então:
+\begin{eqnarray}
+ {\delta c}^{\text{est}}_{B,BB}(\mathbf{x}_{g},\mathbf{x}_{s}) = \sum_{s} \sum_{g} \int d\omega \frac{-2~\omega^{2}}{c_{0}^{3}(\mathbf{x})} \hat{p}_{B}^{*} (\mathbf{x},\omega;\mathbf{x}_{s})~\hat{G}_{B}^{*}(\mathbf{x},\omega;\mathbf{x}_{g})~\hat{\delta p}_{S}(\mathbf{x}_{g},\omega;\mathbf{x}_{s})
+\end{eqnarray}
+\\
+onde $\hat{p}_{B}^{*}$ é o campo de onda direto e $\hat{G}_{B}^{*} \hat{\delta p}_{S}$ é a retroprojeção do resíduo. A correlação cruzada entre esses dois termos no domínio do tempo, dará uma estimativa da perturbação da componente de fundo do modelo de velocidade. Portanto, é possível observar que para a abordagem convencional utiliza-se $p_{0}$ e $G_{0}$, assim como a abordagem decomposta $p_{B}$, $G_{B}$, $p_{S}$ e $G_{S}$ são conhecidos, porque todos eles são calculados a partir do meio de referência conhecido. Essa abordagem decomposta, nos da direito em decompor o modelo em duas partes de forma arbitrária, sem depender de nenhuma aproximação.
+

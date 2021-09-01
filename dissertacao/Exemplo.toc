@@ -1,0 +1,24 @@
+\select@language {brazil}
+\contentsline {chapter}{\numberline {1} \MakeUppercase {Introdu\IeC {\c c}\IeC {\~a}o}}{1}
+\contentsline {section}{\numberline {1.1}Objetivo do projeto}{2}
+\contentsline {chapter}{\numberline {2} \MakeUppercase {Fundamentos Te\IeC {\'o}ricos}}{3}
+\contentsline {section}{\numberline {2.1}Migra\IeC {\c c}\IeC {\~a}o reversa no tempo}{3}
+\contentsline {section}{\numberline {2.2}FWI baseado na decomposi\IeC {\c c}\IeC {\~a}o dos n\IeC {\'u}cleos de sensibilidade}{4}
+\contentsline {section}{\numberline {2.3}Invers\IeC {\~a}o de onda completa}{4}
+\contentsline {section}{\numberline {2.4}N\IeC {\'u}cleo de sensibilidade}{5}
+\contentsline {subsection}{\numberline {2.4.1}Lineariza\IeC {\c c}\IeC {\~a}o e representa\IeC {\c c}\IeC {\~a}o dos n\IeC {\'u}cleos de sensibilidade}{9}
+\contentsline {section}{\numberline {2.5}Perturba\IeC {\c c}\IeC {\~a}o Decomposta}{10}
+\contentsline {subsection}{\numberline {2.5.1}Subn\IeC {\'u}cleo de sensibilidade}{11}
+\contentsline {subsubsection}{\numberline {2.5.1.1}Fontes secund\IeC {\'a}rias para o residual do campo de onda de fundo}{13}
+\contentsline {subsubsection}{\numberline {2.5.1.2}Fontes secund\IeC {\'a}rias para o residual do campo de onda singular}{14}
+\contentsline {section}{\numberline {2.6}An\IeC {\'a}lise das contribui\IeC {\c c}\IeC {\~o}es da redecomposi\IeC {\c c}\IeC {\~a}o}{16}
+\contentsline {subsection}{\numberline {2.6.1}Contribui\IeC {\c c}\IeC {\~a}o da parte de fundo e singular}{18}
+\contentsline {section}{\numberline {2.7}Retroproje\IeC {\c c}\IeC {\~a}o dos res\IeC {\'\i }duos nos espa\IeC {\c c}os dos modelos}{21}
+\contentsline {chapter}{\numberline {3} \MakeUppercase {Metodologia}}{25}
+\contentsline {section}{\numberline {3.1}Invers\IeC {\~a}o convencional}{25}
+\contentsline {section}{\numberline {3.2}Invers\IeC {\~a}o alternada}{27}
+\contentsline {section}{\numberline {3.3}Modelos de velocidade}{30}
+\contentsline {chapter}{\numberline {4} \MakeUppercase {Resultados}}{31}
+\contentsline {section}{\numberline {4.1}Experimento 1 - Invers\IeC {\~a}o convencional}{31}
+\contentsline {chapter}{REFER\^ENCIAS}{34}
+\contentsline {chapter}{\numberline {5} \MakeUppercase {Cronograma do projeto}}{37}

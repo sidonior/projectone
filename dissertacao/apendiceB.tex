@@ -1,0 +1,476 @@
+\chapter{BFGS-B de memória limitada}
+
+Para resolver um problema de minimização a função $f$ apresenta não linearidade, cujo o gradiente está disponível, o problema  apresenta $n$ variáveis, entretanto, para resolver esse entrave é utilizado o método de otimização Quasi-Newton. O método é desenvolvido a partir da aproximação do Hessiano, na qual utiliza o inverso da matriz Jacobiano visualizado na equação \ref{newton}, nesse contexto, é realizado a transformação do método de Newton para o método Quasi-Newton baseado na projeção do gradiente, na qual utiliza uma matriz BFGS de memória limitada para aproximar o Hessiano \citep{nocedal_2006}. O esquema de atualização do método de Newton é dado por 
+\begin{eqnarray}
+\nonumber
+          \mathbf{x}_{k+1}= \mathbf{x}_{k}- \mathbf{J}\left( \mathbf{x}_{k}\right)^{-1}  \mathbf{g}\left( \mathbf{x}_{k}\right) 
+\end{eqnarray}
+onde
+\begin{eqnarray}
+\nonumber
+ \mathbf{p}_{k} =  - \mathbf{J}\left( \mathbf{x}_{k}\right)^{-1} \mathbf{g}\left( \mathbf{x}_{k}\right)
+\end{eqnarray}
+\begin{eqnarray}
+\nonumber
+ \mathbf{J}\left( \mathbf{x}_{k}\right)^{-1} \approx  \mathbf{H}\left( \mathbf{x}_{k}\right) 
+\end{eqnarray}
+\begin{eqnarray}
+      \mathbf{x}_{k+1}= \mathbf{x}_{k}- \mathbf{H}\left( \mathbf{x}_{k}\right)   \mathbf{g}\left( \mathbf{x}_{k}\right) 
+ \label{newton}
+\end{eqnarray}
+Para aproximar o Jacobiano inverso no Hessiano, é necessário sastifazer uma última condição, logo, será realizado a série de Taylor na equação \ref{newton} e, consequentemente, truncando em termos de primeira ordem, temos
+
+\begin{eqnarray}
+        \mathbf{g}_{k+1} =  \mathbf{g}_{k} +  \mathbf{J}_{k}\left( \mathbf{x}_{k+1} -  \mathbf{x}_{k} \right)
+\end{eqnarray}
+
+\begin{eqnarray}
+ \mathbf{s}_{k} =  \mathbf{x}_{k+1} -  \mathbf{x}_{k} ~~~~~~~~  \mathbf{y}_{k} =  \mathbf{g}_{k+1} -  \mathbf{g}_{k}
+\label{skyk}
+ \end{eqnarray}
+
+\begin{eqnarray}
+ \nonumber
+       \mathbf{J}_{k}^{-1}  \mathbf{y}_{k} =  \mathbf{s}_{k}
+\end{eqnarray}
+
+
+Substituindo o Jacobiano inverso pelo Hessiano, é possível obter a equação abaixo chamada de Quasi-Newton ou equação secante, definida por
+\begin{eqnarray}
+ \mathbf{H}_{k+1}  \mathbf{y}_{k} =  \mathbf{s}_{k}
+ \label{quasi}
+\end{eqnarray}
+A partir da equação \ref{quasi}, será realizado uma correção de um grau para $H_{k}$, pois $H_{k}^{0}$ é uma matriz não singular arbitrária, na qual pode ser substituida pela matriz identidade \citep{al-baali_broydens_2013}. Assim, a atualização do Hessiano é dado por \\
+
+ para $k + 1 > m$ 
+\begin{eqnarray}
+\nonumber
+      \mathbf{H}_{k+1} =  \mathbf{H}_{k} -  \mathbf{u}_{k}  \mathbf{v}_{k}^{T}~~~~~~ ~~~~~~~ ~~~ ~~ ~ ~~~ ~~~~  \\ \nonumber \\
+       \mathbf{H}_{k+1}= \mathbf{H}_{k}+\frac{ \mathbf{s}_{k}  \mathbf{s}_{k}^{T}}{ \mathbf{y}_{k}^{T}  \mathbf{s}_{k}}\left[\frac{ \mathbf{y}_{k}^{T}  \mathbf{H}_{k}  \mathbf{y}_{k}}{ \mathbf{y}_{k}^{T}s_{k}}+1\right]-\frac{1}{ \mathbf{y}_{k}^{T}s_{k}}\left[ \mathbf{s}_{k}  \mathbf{y}_{k}^{T}  \mathbf{H}_{k}+ \mathbf{H}_{k}  \mathbf{y}_{k}  \mathbf{s}_{k}^{T}\right] 
+ \label{bfgs}
+\end{eqnarray}
+A equação \ref{bfgs} é o esquema de atualização da matriz BFGS \citep{nocedal_1980} . Dessarte, se $\mathbf{H}$ for uma matriz positivo definida e $\mathbf{y}_{k}^{T} \mathbf{s}_{k} > 0$ , a matriz atualizada $\mathbf{H}_{k+1}$ será positivo definida.  
+
+Quando há problemas de minimização de grande porte, as técnicas de atualização do método de Quasi-Newton tornam-se caras computacionalmente e a aproximação do Hessiano ocupará um grande espaço. Entretanto, para solucionar esse problema será necessário realizar uma adaptação do método BFGS, na qual em cada passo as informações mais antigas contidas na matriz são descartadas e substituidas por novas, assim, facilitando a construção da aproximação do Hessiano sem utilizar muita mémoria.
+
+O método LBFGS-B é um algoritmo que resolve grandes problemas de otimização não linear com limites simples, uma vez que é baseado no método de projeção do gradiente e utiliza matriz BFGS de memória limitada para aproximar o Hessiano que foi redigido acima. O objetivo da otimização tem como minimizar a função objetivo para encontrar a melhor solução que encontre o mínimo valor da função para certo valor, então
+\begin{eqnarray}
+\nonumber
+  \hbox{min}~f(\mathbf{x})~~~~~~~~~~ \\
+\nonumber \\
+\nonumber
+   \hbox{Sujeito}~\hbox{a}~~~l\le\mathbf{x}\le u ~~~
+\end{eqnarray}
+
+Onde o argumento é limitado a $l$ e $u$ que são vetores de limite inferior e superior, respectivamente. Entretanto, para realizar a minimização, o método não requer segundas derivadas ou conhecimento da estrutura da função e será aplicado quando a matriz Hessiano não for prática para calcular, mas o seu armazenamento necessário é linear a N. Nesta seção, será apresentado representações compactas das matrizes de memória limitada. \\
+%\begin{enumerate}
+% \item O algoritmo não requer segundas derivadas ou conhecimento da estrutura da função objetivo;
+% \item É aplicada quando a matriz Hessiano não for prática para calcular;
+% \item É utilizado a atualização da matriz BFGS para aproximar a Hessiana onde o armazenamento necessário seja linear em N;
+% \item O método de projeção em gradiente é usado para determinar um conjunto de restrições ativas a cada iteração
+%\end{enumerate}
+
+O algoritmo minimiza aproximadamante $m_{k}(\mathbf{x})$ sujeitos aos limites inferiores e superiores ativos, então
+\begin{eqnarray}
+m_{k}(\mathbf{x}) = f(\mathbf{x}_{k}) + g_{k}^{T}(\mathbf{x}-\mathbf{x}_{k}) + \frac{1}{2} (\mathbf{x}-\mathbf{x}_{k})^{T} ~\mathbf{B}_{k}~(\mathbf{x}-\mathbf{x}_{k}) 
+\label{quadratic}
+\end{eqnarray}
+
+A minimização é realizada usando o método de projeção do gradiente para um conjunto de limites ativos, realizando isso para cada iteração. Esses limites será tratados como restrições de igualdade, para realizar isso é preciso executar um caminho por partes que é dado por 
+\begin{eqnarray}
+ \mathbf{x}(t) = P(\mathbf{x}_k - t~g_{k}, l, u)
+ \label{projecao}
+\end{eqnarray}
+
+Onde $\mathbf{x}(t)$ é obtido a partir da projeção da direção de descida mais ingrime para a região viável e, também, limitado aos limites inferiores e superiores. A projeção é dada por 
+
+$$ P(\mathbf{x},l,u)_{i}
+= \left\{ \begin{array}{rll}
+          l_{i} & \hbox{se} & \mathbf{x}_{i} < l_{i} \\
+          \mathbf{x}_{i} & \hbox{se} & \mathbf{x}_{i} \in \left[l_{i},u_{i} \right ] \\
+          u_{i} & \hbox{se} & \mathbf{x}_{i} > u_{i}
+          \end{array} \right. $$
+          
+A partir desta definição, é calculado o ponto de cauchy generalizado $\mathbf{x}^{c}$, que é definido como o primeiro minimizador local da quadrática univariada.
+\begin{eqnarray}
+ q_{k} (t)& = & m_{k} (\mathbf{x}(t)) 
+\end{eqnarray}
+
+
+
+    As variáveis cujo o valor no ponto $\mathbf{x}^{c}$ está no limite inferior ou superior, compreendendo um certo conjunto ativo $A(\mathbf{x}^{c})$. A partir disso, será considerado os seguintes problemas quadráticos
+    
+    \begin{eqnarray}
+     \hbox{min}\left \{ m_{k}(\mathbf{x}) : \mathbf{x}_{i}=\mathbf{x}_{i}^{c},\forall_{i} \in \mathcal{A}(\mathbf{x}^{c}) \right \}
+     \label{subp1}
+    \end{eqnarray}
+    \begin{eqnarray}
+     \hbox{sujeito a }~~l_{i}\le \mathbf{x}_{i} \le u_{i} ~~~\forall \not\in \mathcal{A}(\mathbf{x}^{c})
+     \label{subp2}
+     \end{eqnarray}
+
+
+
+   Onde $m_{k}$ será resolvido ou aproximadamante resolvido, ignorando os limites nas variáveis livres que podem ser alcançados por 
+   
+   \begin{enumerate}
+    \item Métodos diretos ou iterativos no subespaço de váriáveis livres por uma abordagem dupla, manipulando os limites ativos por multiplicadores de lagrange.
+    \item Quando o método iterativo é utilizado, será utilizado o ponto de cauchy generalizado $\mathbf{x}^{c}$ como ponto de partida para essa iteração, em seguida, será realizado um truncamento em relação aos limites inferiores e superiores no caminho da direção.
+   \end{enumerate}
+   \subsubsection{Matriz BFGS de memória limitada de forma compactada}
+   No método as matrizes BFGS são apresentadas de forma compacta. As atualizações de $\mathbf{x}_{k}$ armazena um pequeno número sendo m pares de correção $\{\mathbf{s}_{i},\mathbf{y}_{i}\}$ $ i= k-1 \cdots, k-m $, onde esses pares são definidos na equação \ref{skyk}. Com isso, esses pares de correção contém informações sobre a curvatura da função e, em conjunto com a fórmula BFGS , definem a matriz de iteração de memória limitada $\mathbf{B}_{k}$ \citep{byrd_representations_1996}.
+   
+     Para representar a forma compacta da matriz BFGS, é preciso definir a matriz de memória limitada $\mathbf{B}_{k}$ em termos de matrizes de correção da ordem de $nxm$, dessa maneira, essas matrizes são definidas por 
+     \begin{eqnarray}
+     \mathbf{Y}_{k} = \left [ \mathbf{y}_{k-m},~\cdots~, \mathbf{y}_{k-1} \right ] \\
+     \nonumber
+     \mathbf{S}_{k} = \left [\mathbf{s}_{k-m}, ~\cdots~, \mathbf{s}_{k-1} \right ] ~
+     \end{eqnarray}
+     
+     Se $\theta$ for um parâmetro de escala positivo e se a correção de m pares $\{\mathbf{s}_{i},\mathbf{y}_{i}\}_{i=k-1}^{k-m}$ satisfaz $\mathbf{s}_{i}~\mathbf{y}_{i} > 0$, então a matriz obtida atualizando o $\theta \mathbf{I}$ m vezes e utilizando a fórmula BFGS e os pares de correção, a matriz $\mathbf{B}_{k}$ pode ser escrita da seguinte forma
+     \begin{eqnarray}
+      \mathbf{B}_{k} = \theta \mathbf{I} - \mathbf{W}_{k} \mathbf{M}_{k} \mathbf{W}_{k}^{T}
+      \label{b}
+     \end{eqnarray}
+
+     Onde
+     
+     \begin{eqnarray}
+      \nonumber
+      \mathbf{W}_{k}= \left [ \mathbf{Y}_{k}~~~~\large{\theta} \mathbf{S}_{k} \right ]
+     \end{eqnarray}
+     
+      \begin{eqnarray}
+      \nonumber
+       \mathbf{M}_{k}=\left[\begin{array}{cc}{-\mathbf{D}_{k}} & {\mathbf{L}_{k}^{T}} \\ {\mathbf{L}_{k}} & {\theta \mathbf{S}_{k}^{T} \mathbf{S}_{k}}\end{array}\right]^{-1}
+      \end{eqnarray}
+
+       Onde $\mathbf{L}_{k}$  e $\mathbf{D}_{k}$ são matrizes da ordem de $mxm$.Na equação \ref{b} as matrizes $\mathbf{W}_{k}$ e $\mathbf{M}_{k}$ leva informações sobre os pares de correção obtidas a partir das atualizações dos vetores na equação \ref{skyk}. As matrizes $\mathbf{L}_{k}$  e $\mathbf{D}_{k}$ são definidos a partir desses pares de correção, então 
+       
+       \begin{eqnarray} \left(\mathbf{L}_{k} \right)_{i,j}  = \left\{ \begin{array}{rll}
+          (\mathbf{s}_{k-m-1+i})^{T}~(\mathbf{y}_{k-m-1-j})  & \hbox{se}~ i > j \\
+          0 ~~~~~~ ~                 ~~~~~~~~ ~~~~~~~~~ ~~~~~& \hbox{de outro modo}
+          \end{array} \right.
+          \label{lk}
+          \end{eqnarray}
+
+       \begin{eqnarray}
+          \mathbf{D}_{k} = \hbox{diag} \left [ \mathbf{S}_{k-m}^{T}~ \mathbf{Y}_{k-m}, \cdots, \mathbf{S}_{k-1}~ \mathbf{Y}_{k-1} \right ] ~~~~ ~~~~ ~~~~~~~~
+          \label{dk}
+       \end{eqnarray}
+
+
+
+       A partir das equações \ref{lk} e \ref{dk}, a matriz de mémoria limitada $\mathbf{B}_{k}$ na sua representação de forma compacta fica bem estruturada e definida. Existe uma outra representação semelhante a matriz BFGS de memória limitada, onde é realizado uma aproximação da inversa da matriz Hessiana de forma compacta semelhante a forma de $\mathbf{B}_{k}$, então
+       
+       \begin{eqnarray}
+       \mathbf{H}_{k} \equiv \frac{1}{\theta}~ \mathbf{I} + \bar{\mathbf{W}}_{k} \bar{\mathbf{M}}_{k} \bar{\mathbf{W}}_{k}^{T}  
+       \end{eqnarray}
+       
+       Onde 
+       
+       \begin{eqnarray}
+        \nonumber
+        \bar{\mathbf{W}}_{k} \equiv \left [ \frac{1}{\theta}~ \mathbf{Y}_{k} ~~~~~~ \mathbf{S}_{k} \right ]
+       \end{eqnarray}
+
+      \begin{eqnarray}
+      \nonumber
+      \bar{\mathbf{M}}_{k} \equiv\left[\begin{array}{cc}{0} & {-\mathbf{R}_{k}^{-1}} \\ {-\mathbf{R}_{k}^{-T}} &~~~ {\mathbf{R}_{k}^{-T}\left(\mathbf{D}_{k}+\frac{1}{\theta} \mathbf{Y}_{k}^{T} \mathbf{Y}_{k}\right) R_{k}^{-1}}\end{array}\right]
+      \end{eqnarray}
+      
+          \begin{eqnarray} 
+          \nonumber
+          \left(\mathbf{R}_{k} \right)_{i,j}  = \left\{ \begin{array}{rll}
+          (\mathbf{s}_{k-m-1+i})^{T}~(\mathbf{y}_{k-m-1-j})  & \hbox{se}~ i \le j \\
+          0 ~~~~~~ ~                 ~~~~~~~~ ~~~~~~~~~ ~~~~~& \hbox{de outro modo}
+          \end{array} \right.
+          \label{lk1}
+          \end{eqnarray}
+          
+          
+          Para manter a definição positiva da matriz BFGS, será descartado um par de correção $\{\mathbf{s}_{i},\mathbf{y}_{i} \}$ se a condição de curvatura 
+          
+          \begin{eqnarray}
+           \nonumber
+           \mathbf{s}_{k}^{T}~\mathbf{y}_{k} > \hbox{eps} \left \| \mathbf{y} \right \|^{2}
+          \end{eqnarray}
+          
+          se essa condição não for satisfeita para um pequeno eps, então não será excluído o par de correção antigo, com isso, as direções de $m$ em $\mathbf{s}_{k}$ e $\mathbf{y}_{k}$ podem incluir índices menores que $k-m$.
+
+          \subsubsection{O ponto de cauchy generalizado}
+
+          O principal objetivo deste procedimento é encontrar o primeiro minimizador local do modelo quadrático ao longo do caminho linear em partes \citep{lescrenier_convergence_1991}, obtido pela projeção dos pontos na direção de descida mais ingrime, $\mathbf{x}_{k}-t~\mathbf{g}_{k}$ para uma região viável. Para definir os pontos de interrupção $(t)$ em cada direção de coordenada, então
+          
+          \begin{eqnarray}
+          \label{t}
+          t_{i}=\left\{\begin{array}{cl}{\left(\mathbf{x}_{i}^{0}-\mathbf{u}_{i}\right) / \mathbf{g}_{i}} & {\hbox{ se } \mathbf{g}_{i}<0} \\ {\left(\mathbf{x}_{i}^{0}-\mathbf{l}_{i}\right) / \mathbf{g}_{i}} & {\hbox{ se } \mathbf{g}_{i}>0} \\ {\infty} & \hbox{para outros}\end{array}\right.
+          \end{eqnarray}
+          
+          onde a equação \ref{t} traz informações dos limites inferiores e superiores para definir um melhor passo na direção de descida, e é classificado em $\left\{t_{i}, i=1,\cdots,n\right\}$ em ordem crescente para obter o conjunto ordenado $\left\{t^{j} : t^{j} \le t^{j+1}, j=1, \cdots, n\right \} $. Em seguida, é encontrado a projeção no ponto generalizado de cauchy $P(\mathbf{x}^{0} -t~\mathbf{g},l,u)$ um caminho linear por partes que pode ser expresso como
+          
+       
+          \begin{eqnarray} 
+          \nonumber
+          \mathbf{x}_{i}  = \left\{ \begin{array}{rll}
+          {\mathbf{x}_{i}^{0}-t~\mathbf{g}_{i}}  & {\hbox{se}~ t \le t_{i}} \\
+           {\mathbf{x}_{i}^{0}- t_{i}~g_{i}}     & {\hbox{de outro modo}}
+          \end{array} \right.
+          \label{ddd}
+          \end{eqnarray}
+          
+          
+          Examinado no intervalo de $\left [t^{j-1},t^{j}\right]$. Será definido um ponto de interrupção em $(j-1)$-ésimo, então
+          \begin{eqnarray}
+           \mathbf{x}^{j-1} = \mathbf{x}\left(t^{j-1}\right)
+          \end{eqnarray}
+
+          De modo que no intervalo $\left [ t^{j-1}, t^{j}\right ]$
+          \begin{eqnarray}
+          \mathbf{x}(t) = \mathbf{x}^{j-1} + \Delta t d^{j-1} 
+          \end{eqnarray}
+          
+          onde 
+          
+          \begin{eqnarray}
+          \nonumber
+          \Delta t = t-t^{j-1}
+          \end{eqnarray}
+          e
+          \begin{eqnarray} 
+          \mathbf{d}_{i}^{j-1}  = \left\{ \begin{array}{rll}
+          {-\mathbf{g}_{i}}  & {\hbox{se}~ t^{j-1} < t_{i}} \\
+           {0}     & {\hbox{de outro modo}}
+          \end{array} \right.
+          \label{dij}
+          \end{eqnarray}
+          
+  
+          A partir dessa definição, será escrito o segmento de linha no intervalo $\left [ \mathbf{x}\left(t^{j-1}\right),\mathbf{x}\left(t^{j}\right) \right] $ na função que será minimizada nos limites inferiores e superiores, então
+          
+          \begin{eqnarray}
+          \nonumber
+           m(\mathbf{x}) = f + \mathbf{g}^{T}(\mathbf{x}-\mathbf{x}^{0}) + \frac{1}{2}(\mathbf{x}-\mathbf{x}^{0})^{T}~\mathbf{B}(\mathbf{x}-\mathbf{x}^{0})
+          \end{eqnarray}
+          \begin{eqnarray}
+          m(\mathbf{x}) = f+ \mathbf{g}^{T}(\mathbf{z}^{j-1} + \Delta t~d^{j-1}) + \frac{1}{2} (\mathbf{z}^{j-1}+ \Delta t~d^{j-1})^{T} \mathbf{B} (\mathbf{z}^{j-1} +\Delta t~d^{j-1})
+          \label{mksegx}
+          \end{eqnarray}
+          onde
+          \vspace{-0.25cm}
+          \begin{eqnarray}
+          \mathbf{z}^{j-1}= \mathbf{x}^{j-1} - \mathbf{x}^{0}
+          \label{zzz}
+          \end{eqnarray}
+
+          
+          Portanto, utilizando o segmento de linha $\left [ \mathbf{x}\left(t^{j-1}\right),\mathbf{x}\left(t^{j}\right) \right] $ na função $m(\mathbf{x})$, pode ser escrita como um quadrático em $t$, então
+          
+          \begin{eqnarray}
+          \nonumber
+          \hat{m}\left(\Delta t\right) = \left(f + \mathbf{g}^{T} \mathbf{z}_{j-1} + \frac{1}{2} \mathbf{z}_{j-1} ^{T}~~\mathbf{B}~~\mathbf{z}_{j-1}\right) + \left(\mathbf{g}^{T} d_{j-1}^T~~\mathbf{B}~~\mathbf{z}_{j-1}\right) \Delta t + \frac{1}{2} \left(d_{j-1}^{T}~\mathbf{B}~d_{j-1}\right) \Delta t^{2}
+          \end{eqnarray}
+
+          \begin{eqnarray}
+           \hat{m}\left(\Delta t\right) \equiv f_{j-1} + f^{\prime}_{j-1}~~ \Delta t + \frac{1}{2} f^{\prime \prime}_{j-1} ~~\Delta t^{2}
+           \end{eqnarray}
+ 
+          onde os parâmetros desses quadráticos são
+          
+          \begin{eqnarray}
+          \nonumber
+          f_{j-1} = f + \mathbf{g}^{T} \mathbf{z}_{j-1} + \frac{1}{2} \mathbf{z}_{j-1} ^{T}~~\mathbf{B}~~\mathbf{z}_{j-1}
+          \end{eqnarray}
+          \begin{eqnarray}
+           f^{\prime}_{j-1}=\mathbf{g}^{T} d_{j-1}^T~~\mathbf{B}~~\mathbf{z}_{j-1}
+           \label{fprime}
+          \end{eqnarray}
+          \begin{eqnarray}
+          f^{\prime \prime}_{j-1} =d_{j-1}^{T}~\mathbf{B}~d_{j-1}
+          \label{f2prime}
+          \end{eqnarray}
+
+          
+          Diferenciando $\hat{m}(t)$ e igualando a zero, é obtido $\Delta t ^{*} = \frac{-f_{j-1}^{\prime}}{f^{\prime \prime}_{j-1}}$ desde que a matriz $\mathbf{B}$ é definida positivo, isso define um minimizador fornecido $t^{j-1}+ \Delta t^{*}$ que pode ser encontrado dentro do intervalo em $ \left[t^{j-1},\right. \left. t^{j}\right)$ De outra forma o ponto generalizado de cauchy pode ser encontrado em $\mathbf{x}\left(t^{j-1}\right) $ se $f^{\prime}_{j-1} > 0$ ou em $\mathbf{x}\left(t^{j}\right)$ se $f^{\prime}_{j-1}<0$, mas se ele não for encontrado nesses intervalos citado,então
+          \begin{eqnarray}
+           \mathbf{x}^{j} = \mathbf{x}^{j-1} + \Delta t^{j-1} d^{j-1}~;~~\Delta t^{j-1}= t^{j} - t^{j-1}
+           \label{eqx}
+          \end{eqnarray}
+
+          A partir dessa nova atualização, será aplicado $\mathbf{x}^{j}$ nas derivadas direcionais de $f^{\prime}$ e $f^{\prime \prime}$ à medida que a pesquisa se move para o intervalo $ \left[t^{j-1}, t^{j}\right]$ .
+          
+          Como consequência, será suposto que apenas uma variável se torne ativa em $t^{j}$ e será denotado seu índice por $b$, então 
+          \begin{eqnarray}
+           \nonumber
+           t_{b}= t^{j}
+          \end{eqnarray}
+
+          onde será zerado a componente da direção da pesquisa, assim
+          
+          \begin{eqnarray}
+           d^{j}=d^{j-1}+ \mathbf{g}_{b} e_{b}
+           \label{ddddd}
+          \end{eqnarray}
+          onde $e_{b}$ é um vetor unitário. Utilizando as definições de \ref{zzz} e \ref{eqx}, então
+          \begin{eqnarray}
+           \mathbf{z}^{j} = \mathbf{z}^{j-1} + \Delta t^{j-1} d^{j-1}
+           \label{zzzzz}
+          \end{eqnarray}
+
+          Aplicando as equações \ref{ddddd} e \ref{zzzzz} em \ref{fprime} e \ref{f2prime}, então
+          
+          \begin{eqnarray}
+           f^{\prime}_{j} = f^{\prime}_{j-1} + \Delta t^{j-1} f^{\prime \prime}_{j-1} + \mathbf{g}^{2}_{b} + \mathbf{g}_{b} e^{T}_{b}~\mathbf{B}~\mathbf{z}^{j} 
+           \label{1}
+          \end{eqnarray}
+          
+          \begin{eqnarray}
+          f^{\prime \prime}_{j} = f^{\prime \prime}_{j-1} + 2 \mathbf{g}_{b} e_{b}^{T}~\mathbf{B}~d^{j-1} + \mathbf{g}_{b}^{2} e_{b}^{T}~\mathbf{B}~e_{b} 
+          \label{2}
+          \end{eqnarray}
+          
+          Usando a fórmula BFGS \ref{b} e a definição na equação \ref{dij} e aplicando nas equações \ref{1} e \ref{2}, então
+          \begin{eqnarray}
+          \label{updatefprime}
+           f^{\prime}_{j} = f^{\prime}_{j-1} + \Delta t^{j-1}~f^{\prime \prime}_{j-1} + \mathbf{g}_{b}^{2} + \theta \mathbf{g}_{b}\mathbf{z}^{j}_{b} - \mathbf{g}_{b} w_{b}^{T} \mathbf{M} \mathbf{W}^{T} \mathbf{z}^{j}
+          \end{eqnarray}
+
+          \begin{eqnarray}
+          \label{updatefprime2}
+          f^{\prime \prime } = f^{\prime \prime}_{j-1} -2\theta \mathbf{g}_{b}^{2} - 2 \mathbf{g}_{b} w_{b}^{T} \mathbf{M}\mathbf{W}^{T} d^{j-1} + \theta \mathbf{g}_{b}^{2} - \mathbf{g}_{b}^{2} w_{b}^{T} \mathbf{M} w_{b} 
+          \end{eqnarray}
+
+           onde $w_{b}$ significa a b-ésima linha da matriz $\mathbf{W}$. Durante a atualização de  $d^{j}$ e $z^{j}$  nas equações  \ref{ddddd} e \ref{zzzzz}, será realizada uma redução das derivadas direcionais, então 
+           
+           \begin{eqnarray}
+            \nonumber
+            p^{j} \equiv \mathbf{W}^{T} d^{j} = \mathbf{W}^{T} (d^{j-1} + \mathbf{g}_{b} e_{b}) = p^{j-1} + g_{b}e_{b}
+           \end{eqnarray}
+           \begin{eqnarray}
+            c^{j} \equiv \mathbf{W}^{T} \mathbf{z}^{j} = \mathbf{W}^{T} ( \mathbf{z}^{j-1} + \Delta t^{j-1}~d^{j-1})= c^{j-1}+ \Delta t^{j-1} p^{j-1}
+            \label{cccc}
+           \end{eqnarray}
+
+
+          e a atualização das derivadas direcionais das equações \ref{updatefprime} e \ref{updatefprime2} a partir das definições acima, então 
+          
+         \begin{eqnarray}
+          f^{\prime}_{j} = f^{\prime}_{j-1} + \Delta t^{j-1} f^{\prime \prime}_{j-1} + \mathbf{g}^{2}_{b} + \theta \mathbf{g}_{b} \mathbf{z}^{j}_{b} - \mathbf{g}_{b} w_{b}^{T} \mathbf{M}~ c^{j} 
+         \end{eqnarray}
+
+          \begin{eqnarray}
+           f_{j}^{\prime \prime}=f_{j-1}^{\prime \prime}-\theta \mathbf{g}_{b}^{2}-2 \mathbf{g}_{b} w_{b}^{T} \mathbf{M} p^{j-1}-\mathbf{g}_{b}^{2} w_{b}^{T} \mathbf{M} w_{b}
+          \end{eqnarray}
+
+          exigirá operações $O(m^{2})$.
+          
+          \subsubsection{Método para minimização do subespaço}
+          \vspace{0.5cm}
+          \begin{center}
+           \textbf{Método primal direto}
+          \end{center}
+
+          Para realizar a minimização no subespaço, é preciso saber se o ponto de cauchy $\mathbf{x}^{c}$ foi encontrado, a partir disso, a minimização será realizada de maneira aproximada da função quadrática $m(k)$ sobre as variáveis livres e utilizando limites para realizar essa minimização. Será descrita uma abordagem para minimizar a função quadrática, na qual, se chama método direto primário baseado na equação de Sherman-Morrison-Woodbury \citep{sherman_morrison1950}\citep{woodbury1950}. \\
+          
+          O método inicia fixando as varíavies no ponto de Cauchy generalizado $\mathbf{x}^{c}$ e resolvendo a função quadrática sobre o subespaço em conjunto com as demais variáveis livres, então será iniciado com o ponto de $x^{c}$ e colocando limites nas váriáveis livres, então  
+          
+          \begin{eqnarray}
+           \mathbf{x} = \mathbf{x}^{c} + \mathbf{Z}_{k} \hat{d}
+           \label{newx}
+          \end{eqnarray}
+
+          
+          onde $\hat{d}$ é um vetor de dimensão $t$. Definindo um novo $\mathbf{x}$ e substituindo em \ref{quadratic}, então 
+          
+          \begin{eqnarray}
+          \nonumber
+           m_{k} (\mathbf{x}) = f_{k} + \mathbf{g}_{k}^{T} (\mathbf{x}- \mathbf{x}^{c} + \mathbf{x}^{c} - \mathbf{x}_{k}) +\frac{1}{2} (\mathbf{x}-\mathbf{x}^{c}+ \mathbf{x}^{c} -\mathbf{x}_{k})^{T}~\mathbf{B}_{k}(\mathbf{x}-\mathbf{x}^{c}+ \mathbf{x}^{c} -\mathbf{x}_{k})
+          \end{eqnarray}
+          \vspace{-0.5cm}
+          \begin{eqnarray}
+           \nonumber
+            = (\mathbf{g}_{k} + \mathbf{B}_{k} (\mathbf{x}^{c} -\mathbf{x}_{k}))^{T} (\mathbf{x}-\mathbf{x}^{c}) + \frac{1}{2} (\mathbf{x}- \mathbf{x}^{c})^{T}~\mathbf{B}_{k} (\mathbf{x}-\mathbf{x}^{c}) + \gamma~~~~
+          \end{eqnarray}
+          
+          realizando a substituição da equação \ref{newx}, foi encontrado o seguinte resultado
+          \begin{eqnarray}
+        m_{k}(\mathbf{x})  \equiv \hat{d}^{T}\hat{r}^{c} +\frac{1}{2} \hat{d}^{T} \hat{\mathbf{B}}_{k} \hat{d} + \gamma~~~~~~~ ~~~~~ ~ 
+          \end{eqnarray}
+
+        onde $\gamma$ é uma constante. A forma da Hessiana reduzida $\hat{B}_{k}$ em relação a quadrática $m_{k}$  é dada por 
+        \begin{eqnarray}
+         \nonumber
+         \hat{\mathbf{B}}_{k}= \mathbf{Z}^{T}_{k} \mathbf{B} \mathbf{Z}_{k}
+        \end{eqnarray}
+        
+        \begin{eqnarray}
+         \nonumber
+         \hat{r}^{c} = \mathbf{Z}^{T}_{k} (\mathbf{g}_{k} +\mathbf{B}_{k}(\mathbf{x}^{c} -\mathbf{x}_{k}))
+        \end{eqnarray}
+
+        onde $\hat{r}^{c}$ é o gradiente reduzido de $m_{k}$ em $\mathbf{x}^{c}$. Substuindo $\mathbf{B}$ dada na equação \ref{b} e o vetor $c$ dada na equação \ref{cccc}, então 
+        \begin{eqnarray}
+         \hat{r}^{c} =\mathbf{Z}_{k}^{T} (\mathbf{g}_{k} + \theta \left(\mathbf{x}^{c} -\mathbf{x}_{k}) - \mathbf{W}_{k} \mathbf{M}_{k} c\right) 
+        \end{eqnarray}
+        
+        onde o vetor $c$, foi  salvo a partir do cálculo do ponto de Cauchy. Então o problema do subespaço de \ref{quadratic}
+    
+\begin{eqnarray}
+ \hbox{min}~~~~~~ \hat{m}_{k} (\hat{d}) \equiv \hat{d}^{T} \hat{r}^{c} + \frac{1}{2} \hat{d}^{T} \hat{\mathbf{B}}_{k}\hat{d} + \gamma
+ \label{min_sub}
+\end{eqnarray}
+\vspace{-1.0cm}
+\begin{eqnarray}
+\label{limites}
+ \hbox{sujeito a} ~~~l_{i}-\mathbf{x}_{i}^{c} \le \hat{d}_{i} \le u_{i} - \mathbf{x}_{i}^{c} 
+\end{eqnarray}
+
+          A minimização da equação \ref{min_sub} pode ser resolvido por método direto ou por métodos iterativos. Agora será realizado o cálculo da inversa  da matriz de memória limitada reduzida $\hat{\mathbf{B}}_{k}$ pela fórmula de Sherman-Morrison-Woodbury, e obter a solução irrestrita do problema \ref{min_sub}, 
+          
+          \begin{eqnarray}
+          \label{sub}
+           \hat{d}^{u} = - \hat{\mathbf{B}}_{k}^{-1} \hat{r}^{c} 
+          \end{eqnarray}
+
+          a partir disso, será preciso voltar para a direção da região viável, então 
+          
+          \begin{eqnarray}
+           \hat{d}^{*} = \alpha^{*} \hat{d}^{u}
+          \end{eqnarray}
+
+          onde $\alpha^{*}$ é positivo escalar e é definido por,
+          \begin{eqnarray}
+           \alpha^{*} = \hbox{max} \left \{ \alpha : \alpha \le 1, l_{i}-\mathbf{x}^{c}_{i} \le \alpha \hat{d}^{u} \le u_{i} - \mathbf{x}^{c}_{i}~,~ i \in \mathcal{F} \right \}
+          \end{eqnarray}
+
+          Com isso, a solução aproximada de $\bar{\mathbf{x}}$ do subproblema \ref{subp1} e \ref{subp2} é dado por
+          \begin{eqnarray}
+            \bar{\mathbf{x}}_{i}  = \left\{ \begin{array}{rll}
+           {\mathbf{x}_{i}^{c}} ~~~~~~~~~~~~~  &{\hbox{se}~ i~ \not\in \mathcal{F}} \\
+           {\mathbf{x}_{i}^{c} + (\mathbf{Z}_{k} \hat{d}^{*})_{i}}     & {\hbox{se}~i~\in \mathcal{F}}
+          \end{array} \right.
+          \end{eqnarray}
+
+          agora será realizado o cálculo da equação \ref{sub}. A matriz de $\mathbf{B}_{k}$ é dada na equação \ref{b}, a matriz reduzida $\hat{\mathbf{B}}$ é 
+          \begin{eqnarray}
+           \hat{\mathbf{B}}=\theta \mathbf{I}-\left(\mathbf{Z}^{T} \mathbf{W}\right)\left(\mathbf{M} \mathbf{W}^{T} \mathbf{Z}\right)
+          \end{eqnarray}
+
+          Aplicando a fórmula de Sherman-Morrison-Woodbury, então
+          
+          \begin{eqnarray}
+           \hat{\mathbf{B}}^{-1}=\frac{1}{\theta} \mathbf{I}+\frac{1}{\theta} \mathbf{Z}^{T} \mathbf{W}\left(\mathbf{I}-\frac{1}{\theta} \mathbf{M} \mathbf{W}^{T} \mathbf{Z} \mathbf{Z}^{T} \mathbf{W}\right)^{-1} \mathbf{M} \mathbf{W}^{T} \mathbf{Z} \frac{1}{\theta}
+          \end{eqnarray}
+
+          e a direção de Newton $\hat{d}^{u}$ no subespaço é dado por
+          \begin{eqnarray}
+           \hat{d}^{u}=\frac{1}{\theta} \hat{r}^{c}+\frac{1}{\theta^{2}} \mathbf{Z}^{T} \mathbf{W}\left(\mathbf{I}-\frac{1}{\theta} \mathbf{M} \mathbf{W}^{T} \mathbf{Z} \mathbf{Z}^{T} \mathbf{W}\right)^{-1} \mathbf{M} \mathbf{W}^{T} \mathbf{Z} \hat{r}^{c}
+          \end{eqnarray}
+          
+          O custo dessa etapa de minimização do subespaço com base na fórmula de Sherman-Morrison-Woodbury é
+          
+          \begin{eqnarray}
+           2m^{2}t + 6mt  +4 t + O(m^{3})
+          \end{eqnarray}
+          onde $m$ é o número de correções armazenadas e $t$ é o número de variáveis livres.
+          

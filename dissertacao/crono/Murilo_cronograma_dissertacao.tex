@@ -1,0 +1,54 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper,12pt]{article}
+\usepackage{geometry}
+\geometry{
+a4paper,
+total={170mm,257mm},
+left=20mm,
+top=20mm,
+}
+\usepackage[brazilian]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{lscape}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{setspace}
+\onehalfspacing % or \doublespacing
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{landscape}
+\pagestyle{empty}
+\begin{figure}[t]
+\centering
+\includegraphics[scale=0.25]{figuras/Logo_UFPA.pdf}
+\end{figure}
+\vfill
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+UNIVERSIDADE FEDERAL DO PARÁ\\
+INSTITUTO DE GEOCIÊNCIAS\\
+PROGRAMA DE PÓS-GRADUAÇÃO EM GEOFÍSICA
+\end{center}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+ & JUL & AGO & SET & OUT & NOV & DEZ & JAN & FEV & MAR & ABR & MAI & JUN  \\ \hline
+\begin{tabular}[c]{@{}l@{}}1 - Referências Bibliográficas \end{tabular}& x   & x   & x   & x   &     &     &     &     &     &     &     &     \\ \hline
+\begin{tabular}[c]{@{}l@{}}2 - Implementações \end{tabular}& x   & x   & x   &  x   &  x   &   x  &   x  & x    &  x   & x    &  &      \\ \hline
+\begin{tabular}[c]{@{}l@{}}3 - Criação de modelos\end{tabular} &     &    &    &   &     &     &  x   &  x   &  x   &     &     &     \\ \hline
+\begin{tabular}[c]{@{}l@{}}4 - Experimentos computacionais\end{tabular} &     &    &    &    &    &    &    &  x  &  x  &  x  &  x   &     \\ \hline
+\begin{tabular}[c]{@{}l@{}}5 - Interpretação de resultados\end{tabular}&     &     &     &    &    &   &    & x   &  x  & x   &  x   &    \\ \hline
+\begin{tabular}[c]{@{}l@{}}6 - Complementação da dissertação\end{tabular} &     &     &     &     &     &     &     &  x   & x   & x   & x   & x   \\ \hline
+8 - Apresentação da dissertação  &     &     &     &     &     &     &     &     &     &     &     & x   \\ \hline
+\end{tabular}
+\caption{Cronograma de dissertação de mestrado sob o título: FWI baseada em retro-iluminação por espalhadores: Inversão alternada}
+\label{tab:crono}
+\end{table}
+\end{landscape}
+
+
+\end{document}

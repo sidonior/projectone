@@ -1,0 +1,41 @@
+\select@language {brazil}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces As Figuras mostram os processos realizados para realizar a migra\IeC {\c c}\IeC {\~a}o reversa no tempo: (a) \IeC {\'e} o processo que gera o campo de onda da fonte que evolui para frente no tempo e (b) mostra o processo que gera o campo de onda dos receptores que evolui para tr\IeC {\'a}s no tempo. Fonte : Autor \relax }}{3}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Campo de onda da fonte}}}{3}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Campo de onda dos receptores}}}{3}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces A Figura \IeC {\'e} composta por tr\IeC {\^e}s sub-figuras, a primera (topo) mostra o modelo exato, supomos que podemos decompor em duas partes, uma em plano suavizado (canto inferior esquerdo) e outra parte um plano com a parte da dispers\IeC {\~a}o singular (canto inferior esquerdo). Portanto, gerando dois campos de onda referente aos modelos decompostos. Fonte : \citet {macedo_2014}\relax }}{7}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces A Figura mostra a redecomposi\IeC {\c c}\IeC {\~a}o proposta por \citet {macedo_2014}, onde \IeC {\'e} realizado a decomposi\IeC {\c c}\IeC {\~a}o do modelo de refer\IeC {\^e}ncia em duas partes (fundo e singular), e tamb\IeC {\'e}m, a decomposi\IeC {\c c}\IeC {\~a}o da perturba\IeC {\c c}\IeC {\~a}o do modelo em outras duas partes (fundo e singular). Fonte \citet {macedo_2014}\relax }}{12}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Contribui\IeC {\c c}\IeC {\~o}es de diferentes termos da equa\IeC {\c c}\IeC {\~a}o \ref {pert_sing_full} com informa\IeC {\c c}\IeC {\~o}es de espalhamento/reflex\IeC {\~o}es \IeC {\'u}nico ou m\IeC {\'u}ltiplo. A Figura (a) e (c) mostra as contribui\IeC {\c c}\IeC {\~o}es dos eventos de dispers\IeC {\~a}o m\IeC {\'u}ltipla com a diferen\IeC {\c c}a do tipo de campo que \IeC {\'e} excitado a fonte secund\IeC {\'a}ria. A Figura (b) e (d) mostra as contribui\IeC {\c c}\IeC {\~o}es dos eventos de dispers\IeC {\~a}o \IeC {\'u}nica com a diferen\IeC {\c c}a do operador da fonte secund\IeC {\'a}ria que utiliza informa\IeC {\c c}\IeC {\~a}o do modelo de refer\IeC {\^e}ncia (parte de fundo). Fonte: Macedo (2014) \relax }}{17}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {$\delta p_{S,3}$}}}{17}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {$\delta p_{S,4}$}}}{17}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {$\delta p_{S,6}$ }}}{17}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {$\delta p_{B}$ }}}{17}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Sub-n\IeC {\'u}cleos obtidos a partir da decomposi\IeC {\c c}\IeC {\~a}o do n\IeC {\'u}cleo de sensibilidade $U$ para perturba\IeC {\c c}\IeC {\~a}o do modelo de velocidade. Fonte: \citep {macedo_2014}\relax }}{20}
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Significado f\IeC {\'\i }sico dos subkernels. Cada um dos desenhos mostra tr\IeC {\^e}s elementos: campo de ondas do lado da fonte; o operador que gera a fonte secund\IeC {\'a}ria; e o extrapolador do campo de ondas do lado do receptor. Subcategorias indicam o novo nome e correspond\IeC {\^e}ncia com a nomenclatura numerada anterior. Fonte: \citet {macedo_2014}\relax }}{22}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {$\delta p_B$}}}{22}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {$\delta p_{S,-B\mathcal {L} B} = \delta p_{S,8}$}}}{22}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {$\delta p_{S,-B\mathcal {L} S} = \delta p_{S,7}$}}}{22}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {$\delta p_{S,b\mathcal {V} B} = \delta p_{S,2}$}}}{22}
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {$\delta p_{S,b\mathcal {V} S} = \delta p_{S,1}$}}}{22}
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {$\delta p_{S,B\mathcal {B} B} = \delta p_{S,4B}$}}}{22}
+\contentsline {subfigure}{\numberline {(g)}{\ignorespaces {$\delta p_{S,B\mathcal {B} S} = \delta p_{S,3B}$}}}{22}
+\contentsline {subfigure}{\numberline {(h)}{\ignorespaces {$\delta p_{S,S\mathcal {B} B} = \delta p_{S,6B}$}}}{22}
+\contentsline {subfigure}{\numberline {(i)}{\ignorespaces {$\delta p_{S,S\mathcal {B} S} = \delta p_{S,5B}$}}}{22}
+\contentsline {subfigure}{\numberline {(j)}{\ignorespaces {$\delta p_{S,B\mathcal {S} B} = \delta p_{S,4S}$}}}{22}
+\contentsline {subfigure}{\numberline {(k)}{\ignorespaces {$\delta p_{S,B\mathcal {S} S} = \delta p_{S,3S}$}}}{22}
+\contentsline {subfigure}{\numberline {(l)}{\ignorespaces {$\delta p_{S,S\mathcal {S} B} = \delta p_{S,6S}$}}}{22}
+\contentsline {subfigure}{\numberline {(m)}{\ignorespaces {$\delta p_{S,S\mathcal {S} S} = \delta p_{S,5S}$}}}{22}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Fluxograma mostrando as etapas do processo de invers\IeC {\~a}o convencional. Fonte: Autor \relax }}{27}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Esquema da implementa\c c\~ao da invers\~ao alternada. S\~ao mostradas as 4 primeiras itera\c c\~oes. A linha tracejada vertical separa a modelagem (lado esquerdo) da retropropaga\c c\~ao dos res\'iduos (lado direito). As setas {\color {blue}\emph {azuis}} denotam inje\c c\~ao de res\'iduos. As setas {\color {green}\emph {verdes}} indicam correla\c c\~ao cruzada entre campos. As setas \emph {pretas} representam a atualiza\c c\~ao do modelo e as em {\color {red}\emph {vermelho}}, por sua vez, indicam decomposi\c c\~ao, ora do modelo, ora do campo. Fonte: Autor\relax }}{28}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces A decomposi\IeC {\c c}\IeC {\~a}o do modelo de refer\IeC {\^e}ncia em duas partes, parte de fundo (suavizado) e parte singular (perturbado). Fonte: Autor\relax }}{30}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Modelo de velocidade real para a realiza\IeC {\c c}\IeC {\~a}o da aquisi\IeC {\c c}\IeC {\~a}o para obter os tra\IeC {\c c}os s\IeC {\'\i }smicos dos dados observados.\relax }}{31}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Modelo de velocidade inicial para a realiza\IeC {\c c}\IeC {\~a}o da aquisi\IeC {\c c}\IeC {\~a}o para obter os tra\IeC {\c c}os s\IeC {\'\i }smicos dos dados modelados.\relax }}{32}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Modelos de velocidade gerados a partir do FWI convencional aplicado a um simples modelo utilizando o algoritmo de otimiza\IeC {\c c}\IeC {\~a}o LBFGS-B \relax }}{32}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Itera\IeC {\c c}\IeC {\~a}o 20}}}{32}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Itera\IeC {\c c}\IeC {\~a}o 80}}}{32}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Itera\IeC {\c c}\IeC {\~a}o 120}}}{32}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {Itera\IeC {\c c}\IeC {\~a}o 190 }}}{32}
+\addvspace {10\p@ }

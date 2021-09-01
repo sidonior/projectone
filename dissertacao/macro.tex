@@ -1,0 +1,36 @@
+%% ESte arquivo deve conter os pacotes necess\'arios para a compila\c{c}\~ao 
+%% do seu trabalho e o conjunto de todos os novos comando que voc\^e queira 
+%% criar. N\~AO ALTERAR O NOME DESTE ARQUIVO.
+
+% pacotes
+\usepackage{amssymb} %% Simbolos matem\'aticos
+\usepackage[normalem]{ulem} %% para usar o comando de strikeout (\sout)
+\usepackage{color} %% Permite usar texto colorido
+\usepackage{pdfpages} %% Permite inserir p\'aginas pdf no arquivo latex
+\usepackage{enumerate} %% Permite customizar o contador do enviroment enumerate
+
+
+
+%criando novas cores
+\definecolor{amethyst}{rgb}{0.6, 0.4, 0.8}
+\definecolor{ao}{rgb}{0.0, 0.5, 0.0}
+\definecolor{tangerine}{rgb}{1.0, 0.6, 0.4}
+
+% Criando comandos de correcao e comentarios
+\newcommand{\rem}[1]{{\color{red} \sout{#1}}} % remover texto
+\newcommand{\new}[1]{{\color{blue} #1}} % Incluir texto
+\newcommand{\com}[1]{{\color{ao} #1}} % Incluir coment\'ario
+
+
+% conjuntos
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+
+
+% trigonometria
+\newcommand{\sech}{\textrm{sech}}
+\newcommand{\csch}{\textrm{csch}}
+
+

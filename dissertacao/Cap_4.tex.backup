@@ -1,0 +1,119 @@
+\chapter{Metodologia}
+O processo de inversão é um processo de otimização não-linear, o que visa encontrar um modelo de velocidade estimado que melhor descrevem os dados observados. Dessa maneira, para implementar estes processos de inversão, utilizaremos a linguagem FORTRAN para todas as etapas, tanto para a inversão convencional, quanto para a inversão alternada. Na modelagem, será aplicado a borda de absorção CPML (``Convolutional perfectly matched layer") \citep{roland_2009,pasalic_convolutional_2010}, além disso, para acelerar o processo de modelagem iremos paralelizar os códigos, da modelagem do campo de onda e do processo de otimização, utilizando o conjunto de rotinas (bibliotecas) do MPI separado com 8 ``threads'' para diminuir o tempo dos processos de modelagem.  
+
+Em primeiro plano, será realizado os testes das implementações da inversão convencional, da migração reversa no tempo e das estimativas das perturbações da contribuição do campos multiplamente espalhados. Os algoritmos de otimização estão disponíveis em domínio aberto, na qual utilizaremos o algoritmo do método quase-newton LBFGS-B e do método do gradiente conjugado não-linear. Dessa maneira, com essas implementações em mãos, poderemos realizar o acoplamento da inversão convencional, que calcula o gradiente considerando o espalhamento único, com as estimativas das perturbações a partir dos subnúcleos do campo multiplamente espalhados, o que obtém a inversão alternada proposto. Diante disso, realizaremos testes de acurácia para obter resultados dos erros a partir da escolha dos modelos de fundo e singular, e por fim, o processo completo de inversão para obter uma melhor estimativa do modelo. 
+ 
+
+
+\section{Inversão convencional}
+Na metodologia de inversão tradicional, as iterações do processo de atualização do modelo é determinada a partir de dois tipos de cálculos pré-determinados. O primeiro é o cálculo do gradiente via método dos estados adjuntos, como vimos anteriormente, e o cálculo do problema prosposto conhecido como função objetivo que tem como propósito de quantificar a diferença entre os dados observados e modelados. A partir desses dois cálculos, essas informações serão acrescentadas em um determinado método de otimização, podendo aplicar os mais variados métodos existentes na literatura, porém, neste trabalho, irão ser aplicado os método do gradiente conjugado não-linear e o método quasi-Newton utilizando o algoritmo LBFGS-B \citep{morales_remark_2011}.  \\
+
+O primeiro passo para a realização da inversão, é determinar um modelo de velocidade, o que pode ser sintético ou não, determinando-o como modelo real. A partir disso, podemos realizar a aquisição para encontrar os dados observados utilizando este modelo de velocidade. As informações dos dados observados é de suma importância, pois ele será necessário para encontrar uma estimativa do modelo de velocidade no processo de inversão.  \\
+
+O segundo passo é suavizar o modelo de velocidade real e determina-lo como modelo inicial do processo de inversão, definido isso, podemos realizar a aquisição para encontrar os dados modelados,logo, com os dados obtidos é possível realizar o cálculo da função objetivo. Entretanto, depois de realizar a aquisição dos dados modelados, precisamos calcular o gradiente da função objetivo via método dos estados adjuntos, então será realizada a diferença entre os dados observados e modelados que irão servir como fonte adjunta para o processo da modelagem adjunta. Realizando a modelagem adjunta, é possível encontrar o gradiente da função objetivo a partir do cálculo da correlação cruzada entre o campo de onda modelado direto e o campo de onda adjunto. \\
+
+O terceiro passo é adicionar as duas informações obtidas nos dois primeiros passos que vai servir de entrada para os métodos de otimização que serão aplicados neste trabalho. O processo de otimização irá atualizar o modelo de velocidade inicial, porém, para realizar uma atualização, é preciso avaliar se a função objetivo diminuiu ou não com a direção de busca e a pesquisa de linha prosposta pelo método. Se a função objetivo não diminuiu, então será necessário avaliar novamente realizando as duas etapas de modelagem até o funcional diminuir. Se o funcional diminiuir, então a proposta de atualização do modelo foi efetivo para que a função tenha um descréscimo, e então a atualização será realizada, com isso, sera utilizado o modelo de velocidade atualizado para realizar novamente as modelagens até que esse processo tenha convergência. Observe o fluxograma de como é realizada o processo de inversão na Figura \ref{fig:fluxograma_otimização}.
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[width=0.65\textwidth]{Figuras/fluxograma.pdf}
+\caption{Fluxograma mostrando as etapas do processo de inversão convencional. Fonte: Autor } 
+\label{fig:fluxograma_otimização}
+\end{figure}
+
+
+\newpage
+\section{Inversão alternada}
+Idealmente, as primeiras iterações no processo de inversão deveriam atualizar as componentes de baixa frequência e gradualmente incluir as informações do comprimento de onda cada vez mais curto a medida que o processo fosse feito. Mas como sabemos, cada iteração geram modelos de velocidade com potencial de gerarem ondas multiplamente espalhadas. Com o uso do subnúcleos podemos usar essa ``desvantagem'' a nosso favor. 
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.75\textwidth]{Figuras/esquema.eps}
+  \caption{Esquema da implementa\c c\~ao da invers\~ao alternada. S\~ao mostradas as 4 primeiras itera\c c\~oes. A linha tracejada vertical separa a modelagem (lado esquerdo) da retropropaga\c c\~ao dos res\'iduos (lado direito). As setas {\color{blue}\emph{azuis}} denotam inje\c c\~ao de res\'iduos. As setas {\color{green}\emph{verdes}} indicam correla\c c\~ao cruzada entre campos. As setas \emph{pretas} representam a atualiza\c c\~ao do modelo e as em {\color{red}\emph{vermelho}}, por sua vez, indicam decomposi\c c\~ao, ora do modelo, ora do campo. Fonte: Autor}
+  \label{fig:esquema}
+\end{figure}
+
+
+A Figura~\ref{fig:esquema} mostra um esquema simplificado de como seria implementado o processo de inversão alternada. São mostradas as quatro primeiras iterações que est\~ao separadas por linhas horizontais cheias. A linha tracejada vertical separa, em cada itera\c c\~ao, as etapas de modelagem do campo direto (lado esquerdo) da retropropaga\c c\~ao dos res\'iduos (lado direito). Em cada retropropaga\c c\~ao, setas {\color{blue}\emph{azuis}} indicam a inje\c c\~ao de res\'iduos. J\'a as setas {\color{green}\emph{verdes}} indicam correla\c c\~ao cruzada, relacionando quais campos modelado e retropropagado ser\~ao usados na constru\c c\~ao da dire\c c\~ao de descida para aquela itera\c c\~ao. A setas \emph{pretas} representam a atualiza\c c\~ao do modelo que \'e passada para a itera\c c\~ao seguinte e, finalmente, as setas {\color{red}\emph{vermelhas}} denotam uma decomposi\c c\~ao, ora do modelo, ora de um campo (res\'iduo). \\
+
+
+A primeira atualiza\c c\~ao \'e feita segundo a abordagem  convencional: Os campos direto, $p_0$, e dos res\'iduos, $\delta p_0$, s\~ao propagados e retropropagados, respectivamente, no modelo inicial $c_0$. Esta atualiza\c c\~ao basicamente funciona como uma migra\c c\~ao e pode ser vista como a parte singular para a pr\'oxima itera\c c\~ao. \\
+
+%\footnote{Aqui estamos supondo um modelo ac\'ustico isotr\'opico descrito pelo m\'odulo de incompressibilidade $K$ e a densidade $\rho$. Por simplicidade a densidade \'e considerada constante. Obviamente, nada impede de usarmos outras parametriza\c c\~oes equivalentes como, por exemplo, densidade constante e velocidade.} 
+
+Na segunda itera\c c\~ao, usa-se um dos subn\'ucleos propostos de modo a tirar vantagem das ondas espalhadas geradas por essa componente que acabou de ser inclu\'ida no modelo de refer\^encia para gerar atualiza\c c\~oes no modelo de fundo. O campo direto, $p_1$ \'e propagado no modelo atualizado $c_1 = c_0 + \delta c_0$ por\'em, extrai-se a componente $p_{1S} = p_1 - p_0$. \'E bom salientar que $p_0$, portanto, deve ser armazenado da itera\c c\~ao anterior. Somente a componente singular ser\'a usada na correla\c c\~ao cruzada para defini\c c\~ao da dire\c c\~ao de descida. J\'a o campo retropropagado \'e modelado a partir da componente singular do res\'iduo $\delta p_{1S}=p_S^{\text{obs}}-p_{1S}$ no modelo de fundo para esta itera\c c\~ao, $c_0$. O problema de separa\c c\~ao de entre campos observados de fundo, $p_B^{\text{obs}}$, e espalhado, $p_S^{\text{obs}}$ se imp\~oe e solu\c c\~oes para diferentes cen\'arios devem ser investigadas. \\ 
+
+
+Na terceira itera\c c\~ao com a mais recente atualiza\c c\~ao do modelo de fundo, podemos usar o n\'ucleo convencional para 
+gerar outra atualiza\c c\~ao da parte singular. Alternando atualiza\c c\~oes  da parte singular com a parte de fundo do modelo, n\'os acreditamos que melhores resultados pode ser alcan\c cados. Este esquema est\'a baseado na utiliza\c c\~ao de um dos subn\'ucleos propostos. Para outros subn\'ucleos o esquema deve ser modificado. Porém, a id\'eia geral se mant\'em a mesma: alternar invers\~oes que atualizam ora o modelo de fundo, ora o singular.\\
+
+
+\section{Modelos de velocidade}
+A escolha dos modelos serão cruciais para realizar este tabalho, neste projeto iremos selecionar estratégias para definir os modelos de fundo e singular. A princípio, será realizado a decomposição do modelo de referência,$m$, em duas parte, uma parte sendo o modelo suavizado, $m_{B}$, e outra parte o modelo singular, $m_{S}$. Dessa maneira, é possível obter as informações do campo de onda singular a partir de três estratégias, a primeira será a diferença entre os modelos reais e suavizados, a segunda será definindo um modelo singular utilizando alguma técnica de imageamento dos refletores e a terceira é obtendo o gradiente da primeira atualização da inversão convencional. Na Figura \ref{Fig:escolhamodelo}, observa-se o esquema de separação dos modelos.
+\begin{figure}
+  \centering
+  \includegraphics[width=0.75\textwidth]{Figuras/model_velocity.pdf}
+\caption{A decomposição do modelo de referência em duas partes, parte de fundo (suavizado) e parte singular (perturbado). Fonte: Autor}
+\label{Fig:escolhamodelo}
+  \end{figure}
+  
+A estratégia para definir o modelo singular ou perturbado,$m_{s}$, por imageamento, será realizando a migração reversa no tempo (RTM), que contém informações das reflexões primárias a partir da utilização da aproximação de born. Assim, é possível obter apenas as informações de interesse, na qual consiste no conteúdo das delimitações das camadas onde o campo de onda perde energia e é espalhado. Portanto, no projeto iremos realizar essas três estratégias para realizar a inversão alternada e realizar uma análise qualitativa da acúracia quanto à estratégia utilizada.
+
+\section{Contribuições das componentes dos subnúcleos}
+
+Outra escolha importante, é selecionar as contribuições das componentes dos subnúcleos para obter as estimativas com informações de interesse. Para isso, faz-se necessário realizar combinações 
+
+%\ref{Fig:modelos_iniciais}.
+
+%\begin{figure}[b]
+%\centering
+%\includegraphics[width=0.4\textwidth]{Figures/PR-mod1a-Vp.eps}
+%\includegraphics[width=0.4\textwidth]{Figures/NS-mod1b-t-dKBa.pdf}
+%\caption{Modelos de fundo e singular para calcular os gradientes devido ao espalhamento único e às estimativas para cada contribuição dos subnúcleos. Fonte: Macedo (2014) }
+%\label{Fig:modelos_iniciais}
+%\end{figure}
+
+
+%A partir da equação \ref{sistema_perturbacao}, será obtido o gradiente referentes ao campo total que será decomposto e, também, as estimativas referente às contribuições dos subnúcleos decompostos do campo total, visualizados em cada subnúcleo na Figura \ref{Fig:contrib}.
+%\begin{figure}
+%    \begin{minipage}[b]{0.13\textwidth}
+%      \centering $\delta K^{est}$ \\
+%      \includegraphics[width=\textwidth]{Figures/Cartoon_SdKk.pdf}
+%    \end{minipage}   
+%    \includegraphics[width=0.50\textwidth]{Figures/PR-mod2a-SdKk-cr550.pdf} 
+%    \includegraphics[width=0.13\textwidth]{Figures/blank.pdf} \\}
+%\begin{center}
+%    \begin{minipage}[b]{0.13\textwidth}
+%    \centering $\delta K_{B}^{est}$ \\
+%      \includegraphics[width=\textwidth]{Figures/Cartoon_SdKkB-0.pdf}
+%    \end{minipage}    
+%    \includegraphics[width=0.32\textwidth]{Figures/PR-mod2a-SdKkB-0-cr550.eps}
+%    \includegraphics[width=0.32\textwidth]{Figures/PR-mod2a-SdKkB-S8-cr550.pdf}
+%    \begin{minipage}[b]{0.13\textwidth}
+%      \centering $\delta K_{B}^{est}[,-B\mathcal{L} B]$ \\
+%      \includegraphics[width=\textwidth]{Figures/Cartoon_SdKkB-S8.pdf}
+%    \end{minipage}\\
+%    \begin{minipage}[b]{0.13\textwidth}
+%      \centering $\delta K_{B}^{est}[,BS]$ \\
+%      \includegraphics[width=\textwidth]{Figures/Cartoon_SdKkB-S3.pdf}
+%    \end{minipage}    
+%    \includegraphics[width=0.32\textwidth]{Figures/PR-mod2a-SdKkB-S3-cr550.pdf}
+%    \includegraphics[width=0.32\textwidth]{Figures/PR-mod2a-SdKkB-S6-cr550.pdf}
+%    \begin{minipage}[b]{0.13\textwidth}
+%      \centering $\delta K^{est}_{B}[,SB]$ \\
+%      \includegraphics[width=\textwidth]{Figures/Cartoon_SdKkB-S6.pdf}
+%    \end{minipage}\\
+%    \begin{minipage}[b]{0.13\textwidth}
+%      \centering $\delta K^{est}_{B}[,BB]$ \\
+%      \includegraphics[width=\textwidth]{Figures/Cartoon_SdKkS-S4.pdf}
+%    \end{minipage}    
+%    \includegraphics[width=0.32\textwidth]{Figures/PR-mod2a-SdKkB-S4-cr550.pdf}
+%    \includegraphics[width=0.32\textwidth]{Figures/PR-mod2a-SdKkB-S5-cr550.pdf}
+%    \begin{minipage}[b]{0.13\textwidth}
+%      \centering $\delta K_B^{est}[,SS]$ \\
+%      \includegraphics[width=\textwidth]{Figures/Cartoon_SdKkB-S5.pdf}
+%    \end{minipage}  
+%\end{center}
+%\caption{AAAAA}
+%\label{Fig:contrib}
+%\end{figure}
